@@ -4,6 +4,31 @@ console.log("Extension has run.");
 // then, create tool for generating music
 // figure out syncing voice to music like a proper song
 
+let previousElement = undefined;
+let previousElementOriginalBackground = undefined;
+let currentElement;
+
+const setSelectedElement = () => {
+  document.addEventListener('mousemove', e => {
+    currentElement = document.elementFromPoint(e.clientX, e.clientY);
+    if (previousElement === currentElement) {
+      return;
+    }
+
+    const prevOrCurrentElement = (previousElement ?? currentElement);
+    const prevOrCurrentBackground = (previousElementOriginalBackground ?? currentElement.style.background);
+    (prevOrCurrentElement).style.background = prevOrCurrentBackground;
+    previousElement = currentElement;
+    previousElementOriginalBackground = currentElement.style.background;
+    currentElement.style.background = "#000000";
+    console.log(currentElement.innerText);
+  });
+};
+
+const getTextFromSelectedElement = () => {
+  return currentElement.innerText;
+};
+
 const setSpeechSynthesis = () => {
   const tags = document.querySelectorAll("*");
   const allContent = tags[0].innerText;
