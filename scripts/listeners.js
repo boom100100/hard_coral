@@ -1,7 +1,6 @@
 const previousElementProps = {};
 let currentElement = undefined;
 const mouseMoveEventListener = (e) => {
-  console.log("mouseMoveEventListener running");
   const {
     previousElement,
     previousElementOriginalBackground,
@@ -31,19 +30,18 @@ const mouseMoveEventListener = (e) => {
 // then, create tool for generating music
 // figure out syncing voice to music like a proper song
 const clickEventListener =  (e) => {
-console.log("clickEventListener running");
   const allContent = currentElement.innerText;
   console.log(allContent);
   
-  const cleanContent = (content) => {
-    return content;
-  }
+  // const cleanContent = (content) => {
+  //   return content;
+  // }
   
-  const cleanedContent = cleanContent(allContent);
+  // const cleanedContent = cleanContent(allContent);
   
-  const msg = new SpeechSynthesisUtterance(cleanedContent);
-  // msg.text = cleanedContent;
-  window.speechSynthesis.speak(msg);
+  // const msg = new SpeechSynthesisUtterance(cleanedContent);
+  // // msg.text = cleanedContent;
+  // window.speechSynthesis.speak(msg);
 }
 
 export {
