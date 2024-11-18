@@ -1,3 +1,4 @@
+chrome.storage.sync.set({state: "on"});
 chrome.action.onClicked.addListener(async (tab) => {
     chrome.storage.sync.get("state", (data) => {
         if (data.state === "on") {
