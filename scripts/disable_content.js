@@ -1,7 +1,6 @@
 console.log("Extension has been disabled.");
 
 var removeListeners = (clickEventListener, mouseMoveEventListener) => {
-  // listener that styles hovered element and saves its text
   document.removeEventListener('mousemove', mouseMoveEventListener);
   document.body.removeEventListener('click', clickEventListener, true);
 };
