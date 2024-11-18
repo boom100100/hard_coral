@@ -4,34 +4,43 @@ console.log("Extension has run.");
 // then, create tool for generating music
 // figure out syncing voice to music like a proper song
 
-let previousElement = undefined;
-let previousElementOriginalBackground = undefined;
+const previousElementProps = {};
 let currentElement;
 
-const setSelectedElement = () => {
+const setListeners = () => {
+  // listener that styles hovered element and saves its text
   document.addEventListener('mousemove', e => {
+    const {
+      previousElement,
+      previousElementOriginalBackground,
+      previousElementColor,
+    } = previousElementProps;
+    // saves text (entire element, actually)
     currentElement = document.elementFromPoint(e.clientX, e.clientY);
     if (previousElement === currentElement) {
       return;
     }
 
+    // styling
     const prevOrCurrentElement = (previousElement ?? currentElement);
+    const prevOrCurrentColor = (previousElementColor ?? currentElement.style.color);
     const prevOrCurrentBackground = (previousElementOriginalBackground ?? currentElement.style.background);
     (prevOrCurrentElement).style.background = prevOrCurrentBackground;
-    previousElement = currentElement;
-    previousElementOriginalBackground = currentElement.style.background;
+    (prevOrCurrentElement).style.color = prevOrCurrentColor;
+    previousElementProps.previousElement = currentElement;
+    previousElementProps.previousElementOriginalBackground = currentElement.style.background;
+    previousElementProps.previousElementColor = currentElement.style.color;
     currentElement.style.background = "#000000";
-    console.log(currentElement.innerText);
+    currentElement.style.color = "#eeeeee";
   });
+  
+  // listener that triggers playing text to speech on click (mouseup, actually) event
+  document.body.addEventListener('click', setSpeechSynthesis, true); 
 };
 
-const getTextFromSelectedElement = () => {
-  return currentElement.innerText;
-};
-
-const setSpeechSynthesis = () => {
-  const tags = document.querySelectorAll("*");
-  const allContent = tags[0].innerText;
+const setSpeechSynthesis = (e) => {
+  const allContent = currentElement.innerText;
+  console.log(allContent);
   
   const cleanContent = (content) => {
     return content;
@@ -39,14 +48,14 @@ const setSpeechSynthesis = () => {
   
   const cleanedContent = cleanContent(allContent);
   
-  var msg = new SpeechSynthesisUtterance();
-  msg.text = cleanedContent;
+  const msg = new SpeechSynthesisUtterance(cleanedContent);
+  // msg.text = cleanedContent;
   window.speechSynthesis.speak(msg);
 }
 
 if ('speechSynthesis' in window) {
   console.log('is supported');
-  setSpeechSynthesis();
+  setListeners();
  }else{
    // Speech Synthesis Not Supported 😣
    alert("Sorry, your browser doesn't support text to speech!");
