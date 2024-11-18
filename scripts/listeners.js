@@ -42,9 +42,21 @@ const clickEventListener =  (e) => {
   }
   
   const cleanedContent = cleanContent(allContent);
-  
-  const msg = new SpeechSynthesisUtterance(cleanedContent);
-  window.speechSynthesis.speak(msg);
+  const words = cleanedContent.split(" ");
+  let pitch = 0;
+  const rate = 3;
+  for (let word of words) {
+    if (pitch >= 2) {
+      pitch = 0;
+    }
+    // do sm
+    const msg = new SpeechSynthesisUtterance(word);
+    msg.pitch = pitch;
+    msg.rate = rate;
+    window.speechSynthesis.speak(msg);
+
+    pitch += .4;
+  }
 }
 
 export {
