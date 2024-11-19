@@ -36,15 +36,15 @@ const clickEventListener =  (e) => {
   }
   const allContent = currentElement.innerText;
   console.log(allContent);
-  
+
   const cleanContent = (content) => {
     return content;
   }
-  
+
   const cleanedContent = cleanContent(allContent);
   const words = cleanedContent.split(" ");
   let pitch = 0;
-  const rate = 3;
+  let rate = .5;
   for (let word of words) {
     if (pitch >= 2) {
       pitch = 0;
@@ -57,6 +57,10 @@ const clickEventListener =  (e) => {
 
     pitch += .4;
   }
+
+  // readded more natural sounding speech: one consolidated text string
+  const msg = new SpeechSynthesisUtterance(cleanedContent);
+  window.speechSynthesis.speak(msg);
 }
 
 export {
