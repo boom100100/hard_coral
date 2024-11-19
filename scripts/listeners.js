@@ -57,6 +57,29 @@ const clickEventListener =  (e) => {
 
     pitch += .4;
   }
+  const wordBuckets = (() => {
+    const buckets = [];
+    while (words.length > 0) {
+
+      const bucket = words.splice(0, 4);
+      buckets.push(bucket);
+    }
+    return buckets;
+  })();
+
+  for (let bucket of wordBuckets) {
+    if (pitch >= 2) {
+      pitch = 0;
+    }
+    // do sm
+    const msg = new SpeechSynthesisUtterance(bucket.join(" "));
+    msg.pitch = pitch;
+    rate = 1;
+    msg.rate = rate;
+    window.speechSynthesis.speak(msg);
+
+    pitch += .4;
+  }
 
   // readded more natural sounding speech: one consolidated text string
   const msg = new SpeechSynthesisUtterance(cleanedContent);
