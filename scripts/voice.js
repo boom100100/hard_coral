@@ -18,45 +18,49 @@ const voiceClickEventListener =  (e) => {
 
   const cleanedContent = cleanContent(allContent);
 
-  // individual words
-  const words = cleanedContent.split(" ");
-  let pitches = [0, 2, 1, 1];
+  // // individual words
+  // const words = cleanedContent.split(" ");
+  // var pitches = [0, 2, 1, 1];
   // let rates = [1, .5, 1.5, .5];
-  let i = 0;
-  for (let word of words) {
-    const index = i % 4;
-    
-    const msg = new SpeechSynthesisUtterance(word);
-    msg.pitch = pitches[index];
-    msg.rate = rates[index];
-    window.speechSynthesis.speak(msg);
-    
-    i++;
-  }
-  
-  // // word buckets
-  // let pitches = [0, 2, 1, 1];
-  // let rates = [1, .5, .25, .5];
-  // let i = 0;
-  // const wordBuckets = (() => {
-  //   const buckets = [];
-  //   while (words.length > 0) {
-
-  //     const bucket = words.splice(0, 4);
-  //     buckets.push(bucket);
-  //   }
-  //   return buckets;
-  // })();
-
-  // for (let bucket of wordBuckets) {
+  // var i = 0;
+  // for (let word of words) {
   //   const index = i % 4;
-  //   // do sm
-  //   const msg = new SpeechSynthesisUtterance(bucket.join(" "));
+    
+  //   const msg = new SpeechSynthesisUtterance(word);
   //   msg.pitch = pitches[index];
   //   msg.rate = rates[index];
   //   window.speechSynthesis.speak(msg);
-
+    
+  //   i++;
   // }
+  
+  // word buckets
+  const words = cleanedContent.split(" ");
+  var pitches = [0, 2, 1, 2, 1, 2];
+  var rates = [1, .5, 1.25, .5, 1, 2];
+  var i = 0;
+  const wordBuckets = (() => {
+    const buckets = [];
+    let ks = [1,2,1,3];
+    var j = 0;
+    while (words.length > 0) {
+      const index = j % ks.length;
+      const bucket = words.splice(0, ks[index]);
+      buckets.push(bucket);
+      j++;
+    }
+    return buckets;
+  })();
+
+  for (let bucket of wordBuckets) {
+    const index = i % pitches.length;
+    // do sm
+    const msg = new SpeechSynthesisUtterance(bucket.join(" "));
+    msg.pitch = pitches[index];
+    msg.rate = rates[index];
+    window.speechSynthesis.speak(msg);
+    i++;
+  }
 
 }
 
