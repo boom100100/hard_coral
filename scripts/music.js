@@ -33,12 +33,12 @@ var createBongoDrums = () => {
 };
 
 var bongo = createBongoDrums();
-
+var bpm = 60;
 var pattern = {
   macho: {
     createOscillator: bongo.macho,
     times: [
-      {startTimeOffset: 0, endTime: .03},
+      {startTimeOffset: 0, endTime: .03}, // offsetBeat. rename?
       {startTimeOffset: .5, endTime: .03},
       {startTimeOffset: 2, endTime: .03},
       {startTimeOffset: 2.5, endTime: .03},
@@ -93,5 +93,5 @@ var musicClickEventListener = (e) => {
 
 export {
   musicClickEventListener,
-  pattern,
+  bpm,
 }
