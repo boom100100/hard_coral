@@ -16,20 +16,24 @@ if ('speechSynthesis' in window) {
     addListener(document, 'mousemove', mouseMoveEventListener);
   })();
 
-  (async () => {
-    const src = chrome.runtime.getURL("scripts/voice.js");
-    const voice = await import(src);
-    const {voiceClickEventListener} = voice;
-
-    // listener that triggers playing text to speech on click ~(mouseup, actually)~ event
-    addListener(document.body, 'click', voiceClickEventListener);
-  })();
-
+  
   (async () => {
     const src = chrome.runtime.getURL("scripts/music.js");
     const music = await import(src);
-    const {musicClickEventListener } = music;
+    const {musicClickEventListener, bpm } = music;
     addListener(document.body, 'click', musicClickEventListener, true);
+
+    (async () => {
+      const src = chrome.runtime.getURL("scripts/voice.js");
+      const voice = await import(src);
+      const {voiceClickEventListener, setBpm} = voice;
+
+
+      setBpm(bpm);
+
+      // listener that triggers playing text to speech on click ~(mouseup, actually)~ event
+      addListener(document.body, 'click', voiceClickEventListener);
+    })();
   })();
 
  } else {
