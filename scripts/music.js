@@ -1,11 +1,13 @@
+var context = new (window.AudioContext || window.webkitAudioContext)();
+var merger = context.createChannelMerger(2);
+merger.connect(context.destination);
 var createBongoDrums = () => {
 
-  var drumConstructor = (frequencyValue) => {
+  var drumConstructor = (frequencyValue, mergerChannelNumber) => {
     // one context per document
-    var context = new (window.AudioContext || window.webkitAudioContext)();
     var osc = context.createOscillator(); // instantiate an oscillator
     osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
-    osc.frequency.value = 380; // Hz
+    osc.frequency.value = frequencyValue; // Hz
 
     var compressor = context.createDynamicsCompressor();
     compressor.attack.value = .1;
@@ -13,51 +15,52 @@ var createBongoDrums = () => {
 
     osc
       .connect(compressor)
-      .connect(context.destination); // connect it to the destination
+      .connect(merger, 0, mergerChannelNumber);
 
     return osc;
   }
     
   var bongo = {
-    macho: drumConstructor(150),
-    hembra: drumConstructor(380),
+    macho: () => drumConstructor(150, 0),
+    hembra: () => drumConstructor(380, 1),
   };
 
   return bongo;
-}
+};
 
 var bongo = createBongoDrums();
 
 var pattern = {
   macho: {
-    osc: bongo.macho,
+    createOscillator: bongo.macho,
     times: [
-      {startTimeOffset: 0, endTime: .1},
-      {startTimeOffset: 1, endTime: .1},
-      {startTimeOffset: 2, endTime: .1},
+      {startTimeOffset: 0, endTime: .03},
+      {startTimeOffset: .5, endTime: .03},
+      {startTimeOffset: 2, endTime: .03},
+      {startTimeOffset: 2.5, endTime: .03},
     ]
   },
   hembra: {
-    osc: bongo.hembra,
+    createOscillator: bongo.hembra,
     times: [
-        {startTimeOffset: .5, endTime: .1},
-        {startTimeOffset: 1.5, endTime: .1},
+        {startTimeOffset: 1, endTime: .03},
+        {startTimeOffset: 3, endTime: .03},
     ]
   },
-}
+};
 
 var setPattern = (pattern) => {
   for (let k in pattern) {
-    var drumOscillator = pattern[k].osc;
+    console.log(k);
     var times = pattern[k].times;
     for (let time of times) {
-
-      drumOscillator.start(); // start the oscillator
-      // osc.stop(context.currentTime + .03);
-      drumOscillator.stop(context.currentTime + time.startTimeOffset + time.endTime);
+        console.log(time);
+        var oscillator = pattern[k].createOscillator();
+        oscillator.start(context.currentTime + time.startTimeOffset);
+        oscillator.stop(context.currentTime + time.startTimeOffset + time.endTime);
     }
   }
-}
+};
 
 var musicClickEventListener = (e) => {
   setPattern(pattern);
