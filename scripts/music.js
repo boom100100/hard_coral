@@ -13,13 +13,17 @@ var createBongoDrums = () => {
     compressor.attack.value = .1;
     compressor.threshold.value = -40;
 
+    var volume = context.createGain();
+    volume.gain.value = 1;
+
     osc
       .connect(compressor)
+      .connect(volume)
       .connect(merger, 0, mergerChannelNumber);
 
     return osc;
   }
-    
+
   var bongo = {
     macho: () => drumConstructor(150, 0),
     hembra: () => drumConstructor(380, 1),
