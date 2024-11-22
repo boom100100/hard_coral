@@ -8,15 +8,21 @@ if ('speechSynthesis' in window) {
   console.log('is supported');
 
   (async () => {
-    const src = chrome.runtime.getURL("scripts/listeners.js");
-    const listeners = await import(src);
-    const {clickEventListener, mouseMoveEventListener} = listeners;
+    const src = chrome.runtime.getURL("scripts/mouse_movement.js");
+    const mouseMovement = await import(src);
+    const {mouseMoveEventListener} = mouseMovement;
 
     // listener that styles hovered element and saves its text
     addListener(document, 'mousemove', mouseMoveEventListener);
+  })();
+
+  (async () => {
+    const src = chrome.runtime.getURL("scripts/voice.js");
+    const voice = await import(src);
+    const {voiceClickEventListener} = voice;
 
     // listener that triggers playing text to speech on click ~(mouseup, actually)~ event
-    addListener(document.body, 'click', clickEventListener);
+    addListener(document.body, 'click', voiceClickEventListener);
   })();
 
   (async () => {
