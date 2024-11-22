@@ -54,6 +54,27 @@ var pattern = {
 };
 
 var setPattern = (pattern) => {
+  const whatToDoNext = `
+
+  pattern is currently just the beat
+  it should be beat and lyrics
+
+  so sync lyrics and beat
+
+  inputs:
+    beat
+    lyrics
+
+  outputs:
+    scheduled and synced song (beat + lyrics)
+
+
+  TODO:
+    can I select time for speech to start?
+    if so, set oscillator start time and speech start time in the same place
+
+  `;
+  
   for (let k in pattern) {
     console.log(k);
     var times = pattern[k].times;
@@ -71,5 +92,6 @@ var musicClickEventListener = (e) => {
 };
 
 export {
-  musicClickEventListener
+  musicClickEventListener,
+  pattern,
 }
