@@ -15,7 +15,7 @@
     {
       "matches": ["<all_urls>"],
       "resources": [
-        "scripts/mouse_movements.js",
+        "scripts/mouse_movement.js",
         "scripts/voice.js",
         "scripts/music.js"
       ]
