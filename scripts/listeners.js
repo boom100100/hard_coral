@@ -42,45 +42,51 @@ const clickEventListener =  (e) => {
   }
 
   const cleanedContent = cleanContent(allContent);
-  const words = cleanedContent.split(" ");
-  let pitch = 0;
-  let rate = .5;
-  for (let word of words) {
-    if (pitch >= 2) {
-      pitch = 0;
-    }
-    // do sm
-    const msg = new SpeechSynthesisUtterance(word);
-    msg.pitch = pitch;
-    msg.rate = rate;
-    window.speechSynthesis.speak(msg);
 
-    pitch += .4;
-  }
-  const wordBuckets = (() => {
-    const buckets = [];
-    while (words.length > 0) {
+  // // individual words
+  // const words = cleanedContent.split(" ");
+  // let pitch = 0;
+  // let rate = .5;
+  // for (let word of words) {
+  //   if (pitch >= 2) {
+  //     pitch = 0;
+  //   }
+  //   // do sm
+  //   const msg = new SpeechSynthesisUtterance(word);
+  //   msg.pitch = pitch;
+  //   msg.rate = rate;
+  //   window.speechSynthesis.speak(msg);
 
-      const bucket = words.splice(0, 4);
-      buckets.push(bucket);
-    }
-    return buckets;
-  })();
+  //   pitch += .4;
+  // }
 
-  for (let bucket of wordBuckets) {
-    if (pitch >= 2) {
-      pitch = 0;
-    }
-    // do sm
-    const msg = new SpeechSynthesisUtterance(bucket.join(" "));
-    msg.pitch = pitch;
-    rate = 1;
-    msg.rate = rate;
-    window.speechSynthesis.speak(msg);
+  // // word buckets
+  // const wordBuckets = (() => {
+  //   const buckets = [];
+  //   while (words.length > 0) {
 
-    pitch += .4;
-  }
+  //     const bucket = words.splice(0, 4);
+  //     buckets.push(bucket);
+  //   }
+  //   return buckets;
+  // })();
 
+  // for (let bucket of wordBuckets) {
+  //   if (pitch >= 2) {
+  //     pitch = 0;
+  //   }
+
+  // do sm
+//   const msg = new SpeechSynthesisUtterance(bucket.join(" "));
+//   msg.pitch = pitch;
+//   rate = 1;
+//   msg.rate = rate;
+//   window.speechSynthesis.speak(msg);
+
+//   pitch += .4;
+// }
+
+// single text string
   // readded more natural sounding speech: one consolidated text string
   const msg = new SpeechSynthesisUtterance(cleanedContent);
   window.speechSynthesis.speak(msg);
