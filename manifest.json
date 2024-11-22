@@ -14,7 +14,10 @@
   "web_accessible_resources": [
     {
       "matches": ["<all_urls>"],
-      "resources": ["scripts/listeners.js"]
+      "resources": [
+        "scripts/listeners.js",
+        "scripts/music.js"
+      ]
     }
   ],
 
