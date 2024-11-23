@@ -67,10 +67,15 @@ var setPattern = () => {
   }
 };
 
-var musicClickEventListener = (e) => {
+var reset = () => {
   for (let o of oscillators) {
     o.stop(context.currentTime);
   }
+};
+
+var musicClickEventListener = (e) => {
+  // prevent overlapping beats
+  reset();
   setPattern();
 };
 
@@ -78,4 +83,5 @@ export {
   musicClickEventListener,
   bpm,
   setPattern,
+  reset,
 }

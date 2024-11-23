@@ -7,10 +7,35 @@ const setSetPattern = (SetPattern) => {
   setPattern = SetPattern;
 };
 
+const speakIds = [];
+let setPatternId;
+const setPatternIds = [];
+
+var reset = () => {
+  // Cancel timeouts that will schedule other utterances.
+  for (let id of speakIds) {
+    clearTimeout(id);
+  }
+  // Cancel intervals that will schedule more beats.
+  // Scheduling beats and cancelling them live here because
+  // the beat is only necessary while there is singing.
+  for (let id of setPatternIds) {
+    clearInterval(id);
+  }
+  // Audio play doesn't always work because the queue gets stuck sometimes.
+  // Cancel speechSynthesis until it stops speaking (one cancel per queued tts utterance).
+  while (window.speechSynthesis.speaking) {
+
+    window.speechSynthesis.cancel();
+  }
+};
 //  https://github.com/mdn/dom-examples/blob/main/web-speech-api/speak-easy-synthesis/script.js
 // then, create tool for generating music
 // figure out syncing voice to music like a proper song
 const voiceClickEventListener = (e) => {
+  // prevent overlapping voices
+  reset();
+
   const currentElement = document.elementFromPoint(e.clientX, e.clientY);
   const allContent = currentElement.innerText;
 
@@ -51,58 +76,39 @@ const voiceClickEventListener = (e) => {
   let k = 0;
   let l = 0;
   const words = cleanedContent.split(" ");
-  // const whenToSpeakBeats = [0,2,2,2];
   const whenToSpeakBeats = [0,1,1,1];
-  // const whenToSpeakBeats = [0,1,2,3];
-  // const whenToSpeakBeats = [0,0, 1,1];
   const pitches = [.5, 2];
   const rates = [1.3, 1.8];
   // some random numbers. timing for this will be way off
   // because api offers unpredictable end times for speech
   // TODO: is pitch variable during pause? No.
   // is rate variable?
-  const id = setInterval(() => {
+  const setupId = setInterval(() => {
     const voices = window.speechSynthesis.getVoices();
     if (voices.length !== 0) {
-        clearInterval(id);
+        clearInterval(setupId);
         completeSetup(voices);
     }
 }, 10);
 
   const completeSetup = (voices) => {
-      // Audio play doesn't always work because the queue gets stuck sometimes.
-    // Cancel it until it stops (one cancel per queued tts utterance).
-    while (
-      window.speechSynthesis.speaking
-      // || 
-      // window.speechSynthesis.pending
-      // || 
-      // window.speechSynthesis.paused
-    ) {
-
-      window.speechSynthesis.cancel();
-      // window.speechSynthesis.cancel();
-      // window.speechSynthesis.cancel();
-      // window.speechSynthesis.cancel();
-      // window.speechSynthesis.cancel();
-      // window.speechSynthesis.cancel();
-    }
-    
     const voicesByName = {};
     for (let i = 0; i < voices.length; i++) {
       voicesByName[voices[i].name] = voices[i];
     }
     let y = 0;
-    const id = setInterval(
+    setPatternId = setInterval(
       () => {
         if (y >= 4) {
-          clearInterval(id);
+          clearInterval(setPatternId);
         }
         setPattern();
         y++;
       },
       words.length / 4 * 1000
     );
+    setPatternIds.push(setPatternId);
+
     for (let word of words) {
       const msg = new SpeechSynthesisUtterance(word);
   
@@ -122,11 +128,19 @@ const voiceClickEventListener = (e) => {
       msg.pitch = pitches[kIndex];
       msg.rate = rates[lIndex];
   
-      setTimeout(
-        () => {
-          window.speechSynthesis.speak(msg);
-        },
-        beatToTimeInMilliseconds(whenToSpeakBeats[jIndex] + j, bpm)
+      speakIds.push(
+        setTimeout(
+          () => {
+
+            // TODO: issue to fix: speaking goes on and off,
+            // so it is no longer a reliable place to cancel
+            // the speak queue. Build this reliable place
+            // so adding to the queue can be stopped.
+
+            window.speechSynthesis.speak(msg);
+          },
+          beatToTimeInMilliseconds(whenToSpeakBeats[jIndex] + j, bpm)
+        )
       );
   
       j++;
@@ -140,4 +154,5 @@ export {
   voiceClickEventListener,
   setBpm,
   setSetPattern,
+  reset
 }
