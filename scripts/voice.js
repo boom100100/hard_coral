@@ -63,6 +63,8 @@ const voiceClickEventListener = (e) => {
   // const whenToSpeakBeats = [1,0,3,1,0,0,0];
   // const whenToSpeakBeats = [0,.5,.5,.5,.5,.5,.5];
   const howLongToSpeakBeats = [1,1,1,1,1,1,1];
+  const words = cleanedContent.split(" ");
+  // const msg = new SpeechSynthesisUtterance(cleanedContent);
 
   const callback = (j) => {
     const jIndex = j % whenToSpeakBeats.length;
@@ -82,8 +84,22 @@ const voiceClickEventListener = (e) => {
   
   let j = 0;
   // TODO: note that this approach means it's not possible to split a word
+  msg.onpause = (e) => {
+    
+    msg.pitch = 2;
+    e.target.pitch = 2;
+    e.currentTarget.pitch = 2;
+    e.srcElement.pitch = 2;
+  };
+
   msg.onboundary = (e) => {
+    const s = "";
+    let prevIndex =
+    s.substring()
+    cleanedContent.sub e.charIndex, cleanedContent.length
     window.speechSynthesis.pause();
+
+    console.log(e);
     callback(j);
     j++;
   };
