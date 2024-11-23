@@ -14,15 +14,14 @@ const voiceClickEventListener = (e) => {
   }
   const currentElement = document.elementFromPoint(e.clientX, e.clientY);
   const allContent = currentElement.innerText;
-  console.log(allContent);
 
   const cleanContent = (content) => {
     return content;
   }
 
   const cleanedContent = cleanContent(allContent);
-  const msg = new SpeechSynthesisUtterance(cleanedContent);
-  window.speechSynthesis.speak(msg);
+  // const msg = new SpeechSynthesisUtterance(cleanedContent);
+  // window.speechSynthesis.speak(msg);
 
   // TODO: move fcn declaration to root of file
   const beatToTimeInMilliseconds = (startingBeat, bpm) => {
@@ -50,59 +49,72 @@ const voiceClickEventListener = (e) => {
         // 60 / 120 * 2 = 1
   };
 
+  let j = 0;
   let k = 0;
   let l = 0;
+  const whenToSpeakBeats = [0,1,2,3];
+  // const whenToSpeakBeats = [0,0, 1,1];
+  const pitches = [.5, 2];
+  const rates = [.3, 1];
   // some random numbers. timing for this will be way off
   // because api offers unpredictable end times for speech
   // TODO: is pitch variable during pause? No.
   // is rate variable?
-  const whenToSpeakBeats = [0,0, 1,1];
-  const pitches = [.5, 2];
-  const rates = [.3, 1];
+  const msg = new SpeechSynthesisUtterance(cleanedContent);
+  msg.onboundary = (e) => {
+    window.speechSynthesis.pause();
+
+    const jIndex = j % whenToSpeakBeats.length;
+    const kIndex = k % pitches.length;
+    const lIndex = l % rates.length;
+    e.utterance.pitch = pitches[kIndex];
+    e.utterance.rate = rates[lIndex];
+    setTimeout(
+      () => {
+        window.speechSynthesis.resume();
+      },
+      beatToTimeInMilliseconds(whenToSpeakBeats[jIndex])
+    );
+
+    j++;
+    k++;
+    l++;
+  };
+
   // const whenToSpeakBeats = [0,.5,1,1.5,4,5,6,7];
   // const whenToSpeakBeats = [1,0,3,1,0,0,0];
   // const whenToSpeakBeats = [0,.5,.5,.5,.5,.5,.5];
   const howLongToSpeakBeats = [1,1,1,1,1,1,1];
   const words = cleanedContent.split(" ");
-  // const msg = new SpeechSynthesisUtterance(cleanedContent);
+  // let msg;
+  // let msgs = [];
+  // let isSpeaking = false;
+  // let i = 0;
 
-  const callback = (j) => {
+  for (let i = 0; i < words.length; i++) {
     const jIndex = j % whenToSpeakBeats.length;
-    const kIndex = k % pitches.length;
-    const lIndex = l % rates.length;
-    // const duration = howLongToSpeakBeats[index];
-    const startTime = whenToSpeakBeats[jIndex];
-    msg.pitch = pitches[kIndex];
-    msg.rate = rates[lIndex];
+    const content = words.slice(i).join(" ");
+    console.log(content);
+    const msg = new SpeechSynthesisUtterance(content);
+    // msgs.push(msg);
+    // schedule utterance
     setTimeout(
       () => {
-        window.speechSynthesis.resume();
+        // TODO: note that this approach means it's not possible to split a word
+        msg.onboundary = (e) => {
+          window.speechSynthesis.pause();
+        };
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(msg);
+        // isSpeaking = true;
       },
-      beatToTimeInMilliseconds(startTime, bpm)
+      beatToTimeInMilliseconds(whenToSpeakBeats[jIndex], bpm)
     );
-  };
-  
-  let j = 0;
-  // TODO: note that this approach means it's not possible to split a word
-  msg.onpause = (e) => {
-    
-    msg.pitch = 2;
-    e.target.pitch = 2;
-    e.currentTarget.pitch = 2;
-    e.srcElement.pitch = 2;
-  };
 
-  msg.onboundary = (e) => {
-    const s = "";
-    let prevIndex =
-    s.substring()
-    cleanedContent.sub e.charIndex, cleanedContent.length
-    window.speechSynthesis.pause();
-
-    console.log(e);
-    callback(j);
     j++;
-  };
+  }
+
+  
 }
 
 export {
