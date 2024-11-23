@@ -9,13 +9,18 @@ const setSetPattern = (SetPattern) => {
 
 const speakIds = [];
 let setPatternId;
-//  https://github.com/mdn/dom-examples/blob/main/web-speech-api/speak-easy-synthesis/script.js
-// then, create tool for generating music
-// figure out syncing voice to music like a proper song
-const voiceClickEventListener = (e) => {
+const setPatternIds = [];
+
+var reset = () => {
   // Cancel timeouts that will schedule other utterances.
   for (let id of speakIds) {
     clearTimeout(id);
+  }
+  // Cancel intervals that will schedule more beats.
+  // Scheduling beats and cancelling them live here because
+  // the beat is only necessary while there is singing.
+  for (let id of setPatternIds) {
+    clearInterval(id);
   }
   // Audio play doesn't always work because the queue gets stuck sometimes.
   // Cancel speechSynthesis until it stops speaking (one cancel per queued tts utterance).
@@ -23,6 +28,13 @@ const voiceClickEventListener = (e) => {
 
     window.speechSynthesis.cancel();
   }
+};
+//  https://github.com/mdn/dom-examples/blob/main/web-speech-api/speak-easy-synthesis/script.js
+// then, create tool for generating music
+// figure out syncing voice to music like a proper song
+const voiceClickEventListener = (e) => {
+  // prevent overlapping voices
+  reset();
 
   const currentElement = document.elementFromPoint(e.clientX, e.clientY);
   const allContent = currentElement.innerText;
@@ -64,10 +76,7 @@ const voiceClickEventListener = (e) => {
   let k = 0;
   let l = 0;
   const words = cleanedContent.split(" ");
-  // const whenToSpeakBeats = [0,2,2,2];
   const whenToSpeakBeats = [0,1,1,1];
-  // const whenToSpeakBeats = [0,1,2,3];
-  // const whenToSpeakBeats = [0,0, 1,1];
   const pitches = [.5, 2];
   const rates = [1.3, 1.8];
   // some random numbers. timing for this will be way off
@@ -98,6 +107,8 @@ const voiceClickEventListener = (e) => {
       },
       words.length / 4 * 1000
     );
+    setPatternIds.push(setPatternId);
+
     for (let word of words) {
       const msg = new SpeechSynthesisUtterance(word);
   
@@ -143,4 +154,5 @@ export {
   voiceClickEventListener,
   setBpm,
   setSetPattern,
+  reset
 }

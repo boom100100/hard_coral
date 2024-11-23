@@ -13,10 +13,13 @@ if ('speechSynthesis' in window) {
     const singingVoice = await import(srcSingingVoice);
     const mouseMovement = await import(srcMouseMovement);
     const { mouseMoveEventListener } = mouseMovement;
-    const { musicClickEventListener } = music;
-    const { voiceClickEventListener } = singingVoice;
+    const { musicClickEventListener, reset: resetMusic } = music;
+    const { voiceClickEventListener, reset: resetSinging } = singingVoice;
     document.removeEventListener('mousemove', mouseMoveEventListener);
     document.body.removeEventListener('click', musicClickEventListener, true);
     document.body.removeEventListener('click', voiceClickEventListener, true);
+
+    resetMusic();
+    resetSinging();
   })();
 }
