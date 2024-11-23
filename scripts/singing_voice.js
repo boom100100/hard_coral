@@ -2,16 +2,15 @@ let bpm;
 const setBpm = (newBpm) => {
   bpm = newBpm;
 };
+let setPattern;
+const setSetPattern = (SetPattern) => {
+  setPattern = SetPattern;
+};
 
 //  https://github.com/mdn/dom-examples/blob/main/web-speech-api/speak-easy-synthesis/script.js
 // then, create tool for generating music
 // figure out syncing voice to music like a proper song
 const voiceClickEventListener = (e) => {
-  // Audio play doesn't always work because the queue gets stuck sometimes.
-  // Cancel it until it stops (one cancel per queued tts utterance).
-  while (window.speechSynthesis.speaking) {
-    window.speechSynthesis.cancel();
-  }
   const currentElement = document.elementFromPoint(e.clientX, e.clientY);
   const allContent = currentElement.innerText;
 
@@ -71,11 +70,39 @@ const voiceClickEventListener = (e) => {
 }, 10);
 
   const completeSetup = (voices) => {
+      // Audio play doesn't always work because the queue gets stuck sometimes.
+    // Cancel it until it stops (one cancel per queued tts utterance).
+    while (
+      window.speechSynthesis.speaking
+      // || 
+      // window.speechSynthesis.pending
+      // || 
+      // window.speechSynthesis.paused
+    ) {
 
+      window.speechSynthesis.cancel();
+      // window.speechSynthesis.cancel();
+      // window.speechSynthesis.cancel();
+      // window.speechSynthesis.cancel();
+      // window.speechSynthesis.cancel();
+      // window.speechSynthesis.cancel();
+    }
+    
     const voicesByName = {};
     for (let i = 0; i < voices.length; i++) {
       voicesByName[voices[i].name] = voices[i];
     }
+    let y = 0;
+    const id = setInterval(
+      () => {
+        if (y >= 4) {
+          clearInterval(id);
+        }
+        setPattern();
+        y++;
+      },
+      words.length / 4 * 1000
+    );
     for (let word of words) {
       const msg = new SpeechSynthesisUtterance(word);
   
@@ -112,4 +139,5 @@ const voiceClickEventListener = (e) => {
 export {
   voiceClickEventListener,
   setBpm,
+  setSetPattern,
 }

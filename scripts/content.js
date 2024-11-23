@@ -20,16 +20,17 @@ if ('speechSynthesis' in window) {
   (async () => {
     const src = chrome.runtime.getURL("scripts/music.js");
     const music = await import(src);
-    const {musicClickEventListener, bpm } = music;
+    const {musicClickEventListener, bpm, setPattern } = music;
     addListener(document.body, 'click', musicClickEventListener, true);
 
     (async () => {
-      const src = chrome.runtime.getURL("scripts/voice.js");
-      const voice = await import(src);
-      const {voiceClickEventListener, setBpm} = voice;
+      const src = chrome.runtime.getURL("scripts/singing_voice.js");
+      const singingVoice = await import(src);
+      const {voiceClickEventListener, setBpm, setSetPattern} = singingVoice;
 
 
       setBpm(bpm);
+      setSetPattern(setPattern);
 
       // listener that triggers playing text to speech on click ~(mouseup, actually)~ event
       addListener(document.body, 'click', voiceClickEventListener);
