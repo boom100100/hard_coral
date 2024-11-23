@@ -52,100 +52,62 @@ const voiceClickEventListener = (e) => {
   let k = 0;
   let l = 0;
   const words = cleanedContent.split(" ");
-  const whenToSpeakBeats = [0,2,2,2];
-  // const whenToSpeakBeats = [0,1,1,1];
+  // const whenToSpeakBeats = [0,2,2,2];
+  const whenToSpeakBeats = [0,1,1,1];
   // const whenToSpeakBeats = [0,1,2,3];
   // const whenToSpeakBeats = [0,0, 1,1];
   const pitches = [.5, 2];
-  const rates = [.3, 1];
+  const rates = [1.3, 1.8];
   // some random numbers. timing for this will be way off
   // because api offers unpredictable end times for speech
   // TODO: is pitch variable during pause? No.
   // is rate variable?
-  const setMsg = (content) => {
-    if (i >= words.length) {
-      return;
+  const id = setInterval(() => {
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length !== 0) {
+        clearInterval(id);
+        completeSetup(voices);
     }
-    window.speechSynthesis.cancel();
-    const msg = new SpeechSynthesisUtterance(content);
-    setTimeout(
-      () => {
-        window.speechSynthesis.speak(msg);
-        j++;
-        i++;
-      }, beatToTimeInMilliseconds(whenToSpeakBeats[j])
-    );
-    msg.onboundary = (e) => {
-      // window.speechSynthesis.pause();
-      // console.log(e);
-      // console.log("e.composedPath()", e.composedPath());
+}, 10);
+
+  const completeSetup = (voices) => {
+
+    const voicesByName = {};
+    for (let i = 0; i < voices.length; i++) {
+      voicesByName[voices[i].name] = voices[i];
+    }
+    for (let word of words) {
+      const msg = new SpeechSynthesisUtterance(word);
   
       const jIndex = j % whenToSpeakBeats.length;
       const kIndex = k % pitches.length;
       const lIndex = l % rates.length;
   
-      // TODO: can I make these work? No
-      e.composed
-      e.utterance.pitch = pitches[kIndex];
-      e.utterance.rate = rates[lIndex];
-      e.pitch = pitches[kIndex];
-      e.rate = rates[lIndex];
-      e.target.pitch = pitches[kIndex];
-      e.target.rate = rates[lIndex];
-      e.srcElement.pitch = pitches[kIndex];
-      e.srcElement.rate = rates[lIndex];
-      e.currentTarget.pitch = pitches[kIndex];
-      e.currentTarget.rate = rates[lIndex];
+      
+      // Trinoids sounds horrible
+      // Whisper sounds the best
+      // Wobble is really interesting, I like it.
+      // Zarvox sounds robotic and slightly bouncy, but works well.
+      // msg.voice = voicesByName["Trinoids"];
+      // msg.voice = voicesByName["Whisper"];
+      msg.voice = voicesByName["Wobble"];
+      // msg.voice = voicesByName["Zarvox"];
+      msg.pitch = pitches[kIndex];
+      msg.rate = rates[lIndex];
+  
       setTimeout(
         () => {
-          const newContent = words.slice(i).join(" ");
-          console.log("newContent", newContent);
-          setMsg(words.slice(i).join(" "));
+          window.speechSynthesis.speak(msg);
         },
-        beatToTimeInMilliseconds(whenToSpeakBeats[jIndex])
+        beatToTimeInMilliseconds(whenToSpeakBeats[jIndex] + j, bpm)
       );
   
       j++;
       k++;
       l++;
-    };
-  };
-
-  // // const whenToSpeakBeats = [0,.5,1,1.5,4,5,6,7];
-  // // const whenToSpeakBeats = [1,0,3,1,0,0,0];
-  // // const whenToSpeakBeats = [0,.5,.5,.5,.5,.5,.5];
-  // const howLongToSpeakBeats = [1,1,1,1,1,1,1];
-  // const words = cleanedContent.split(" ");
-  // // let msg;
-  // // let msgs = [];
-  // // let isSpeaking = false;
-  // // let i = 0;
-
-  // for (let i = 0; i < words.length; i++) {
-  //   const jIndex = j % whenToSpeakBeats.length;
-  //   const content = words.slice(i).join(" ");
-  //   console.log(content);
-  //   const msg = new SpeechSynthesisUtterance(content);
-  //   // msgs.push(msg);
-  //   // schedule utterance
-  //   setTimeout(
-  //     () => {
-  //       // TODO: note that this approach means it's not possible to split a word
-  //       msg.onboundary = (e) => {
-  //         window.speechSynthesis.pause();
-  //       };
-  //       window.speechSynthesis.cancel();
-  //       window.speechSynthesis.speak(msg);
-  //       // isSpeaking = true;
-  //     },
-  //     beatToTimeInMilliseconds(whenToSpeakBeats[jIndex], bpm)
-  //   );
-
-  //   j++;
-  // }
-
-  
-}
+    }
+  }
+};
 
 export {
   voiceClickEventListener,
