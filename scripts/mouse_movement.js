@@ -25,29 +25,6 @@ const mouseMoveEventListener = (e) => {
   currentElement.style.color = "#eeeeee";
 }
 
-//  https://github.com/mdn/dom-examples/blob/main/web-speech-api/speak-easy-synthesis/script.js
-// then, create tool for generating music
-// figure out syncing voice to music like a proper song
-const clickEventListener =  (e) => {
-  // Audio play doesn't always work because the queue gets stuck sometimes.
-  // Cancel it until it stops (one cancel per queued tts reading).
-  while (window.speechSynthesis.speaking) {
-    window.speechSynthesis.cancel();
-  }
-  const allContent = currentElement.innerText;
-  console.log(allContent);
-  
-  const cleanContent = (content) => {
-    return content;
-  }
-  
-  const cleanedContent = cleanContent(allContent);
-  
-  const msg = new SpeechSynthesisUtterance(cleanedContent);
-  window.speechSynthesis.speak(msg);
-}
-
 export {
-  clickEventListener,
   mouseMoveEventListener,
 }

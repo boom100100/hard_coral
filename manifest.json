@@ -14,7 +14,11 @@
   "web_accessible_resources": [
     {
       "matches": ["<all_urls>"],
-      "resources": ["scripts/listeners.js"]
+      "resources": [
+        "scripts/mouse_movement.js",
+        "scripts/singing_voice.js",
+        "scripts/music.js"
+      ]
     }
   ],
 
