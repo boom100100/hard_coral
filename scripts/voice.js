@@ -47,9 +47,11 @@ const voiceClickEventListener = (e) => {
         // 60 / 120 * 2 = 1
   };
 
+  let i = 0;
   let j = 0;
   let k = 0;
   let l = 0;
+  const words = cleanedContent.split(" ");
   const whenToSpeakBeats = [0,2,2,2];
   // const whenToSpeakBeats = [0,1,1,1];
   // const whenToSpeakBeats = [0,1,2,3];
@@ -60,47 +62,53 @@ const voiceClickEventListener = (e) => {
   // because api offers unpredictable end times for speech
   // TODO: is pitch variable during pause? No.
   // is rate variable?
-  // const setMsg = (content) => {
-    
-  // };
-  const msg = new SpeechSynthesisUtterance(cleanedContent);
-  setTimeout(
-    () => {
-      window.speechSynthesis.speak(msg);
-      j++;
-    }, beatToTimeInMilliseconds(whenToSpeakBeats[j])
-  );
-  msg.onboundary = (e) => {
-    window.speechSynthesis.pause();
-    console.log(e);
-    console.log("e.composedPath()", e.composedPath());
-
-    const jIndex = j % whenToSpeakBeats.length;
-    const kIndex = k % pitches.length;
-    const lIndex = l % rates.length;
-
-    // TODO: can I make these work? No
-    e.composed
-    e.utterance.pitch = pitches[kIndex];
-    e.utterance.rate = rates[lIndex];
-    e.pitch = pitches[kIndex];
-    e.rate = rates[lIndex];
-    e.target.pitch = pitches[kIndex];
-    e.target.rate = rates[lIndex];
-    e.srcElement.pitch = pitches[kIndex];
-    e.srcElement.rate = rates[lIndex];
-    e.currentTarget.pitch = pitches[kIndex];
-    e.currentTarget.rate = rates[lIndex];
+  const setMsg = (content) => {
+    if (i >= words.length) {
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const msg = new SpeechSynthesisUtterance(content);
     setTimeout(
       () => {
-        window.speechSynthesis.resume();
-      },
-      beatToTimeInMilliseconds(whenToSpeakBeats[jIndex])
+        window.speechSynthesis.speak(msg);
+        j++;
+        i++;
+      }, beatToTimeInMilliseconds(whenToSpeakBeats[j])
     );
-
-    j++;
-    k++;
-    l++;
+    msg.onboundary = (e) => {
+      // window.speechSynthesis.pause();
+      // console.log(e);
+      // console.log("e.composedPath()", e.composedPath());
+  
+      const jIndex = j % whenToSpeakBeats.length;
+      const kIndex = k % pitches.length;
+      const lIndex = l % rates.length;
+  
+      // TODO: can I make these work? No
+      e.composed
+      e.utterance.pitch = pitches[kIndex];
+      e.utterance.rate = rates[lIndex];
+      e.pitch = pitches[kIndex];
+      e.rate = rates[lIndex];
+      e.target.pitch = pitches[kIndex];
+      e.target.rate = rates[lIndex];
+      e.srcElement.pitch = pitches[kIndex];
+      e.srcElement.rate = rates[lIndex];
+      e.currentTarget.pitch = pitches[kIndex];
+      e.currentTarget.rate = rates[lIndex];
+      setTimeout(
+        () => {
+          const newContent = words.slice(i).join(" ");
+          console.log("newContent", newContent);
+          setMsg(words.slice(i).join(" "));
+        },
+        beatToTimeInMilliseconds(whenToSpeakBeats[jIndex])
+      );
+  
+      j++;
+      k++;
+      l++;
+    };
   };
 
   // // const whenToSpeakBeats = [0,.5,1,1.5,4,5,6,7];
