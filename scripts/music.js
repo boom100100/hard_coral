@@ -52,14 +52,15 @@ var pattern = {
     ]
   },
 };
-
-var setPattern = (pattern) => {
+var oscillators = [];
+var setPattern = () => {
   for (let k in pattern) {
     console.log(k);
     var times = pattern[k].times;
     for (let time of times) {
         console.log(time);
         var oscillator = pattern[k].createOscillator();
+        oscillators.push(oscillator);
         oscillator.start(context.currentTime + time.startTimeOffset);
         oscillator.stop(context.currentTime + time.startTimeOffset + time.endTime);
     }
@@ -67,10 +68,14 @@ var setPattern = (pattern) => {
 };
 
 var musicClickEventListener = (e) => {
-  setPattern(pattern);
+  for (let o of oscillators) {
+    o.stop(context.currentTime);
+  }
+  setPattern();
 };
 
 export {
   musicClickEventListener,
   bpm,
+  setPattern,
 }
