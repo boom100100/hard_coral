@@ -97,6 +97,7 @@ const voiceClickEventListener = (e) => {
       voicesByName[voices[i].name] = voices[i];
     }
     let y = 0;
+    setPattern();
     setPatternId = setInterval(
       () => {
         if (y >= 4) {

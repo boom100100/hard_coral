@@ -16,8 +16,9 @@
       "matches": ["<all_urls>"],
       "resources": [
         "scripts/mouse_movement.js",
+        "scripts/music.js",
         "scripts/singing_voice.js",
-        "scripts/music.js"
+        "scripts/toggle_interaction.js"
       ]
     }
   ],
