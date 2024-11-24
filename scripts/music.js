@@ -55,10 +55,8 @@ var pattern = {
 var oscillators = [];
 var setPattern = () => {
   for (let k in pattern) {
-    console.log(k);
     var times = pattern[k].times;
     for (let time of times) {
-        console.log(time);
         var oscillator = pattern[k].createOscillator();
         oscillators.push(oscillator);
         oscillator.start(context.currentTime + time.startTimeOffset);
@@ -76,7 +74,6 @@ var reset = () => {
 var musicClickEventListener = (e) => {
   // prevent overlapping beats
   reset();
-  setPattern();
 };
 
 export {
