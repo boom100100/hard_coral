@@ -4,6 +4,12 @@ if ('speechSynthesis' in window) {
   console.log('is supported');
 
   (async () => {
+    const srcToggleInteraction = chrome.runtime.getURL("scripts/toggle_interaction.js");
+    const toggleInteraction = await import(srcToggleInteraction);
+    const { enableInteraction } = toggleInteraction;
+
+    enableInteraction();
+
     const srcMusic = chrome.runtime.getURL("scripts/music.js");
     const srcSingingVoice = chrome.runtime.getURL("scripts/singing_voice.js");
 
