@@ -23,7 +23,8 @@ var reset = () => {
     clearInterval(id);
   }
   // Audio play doesn't always work because the queue gets stuck sometimes.
-  // Cancel speechSynthesis until it stops speaking (one cancel per queued tts utterance).
+  // Cancel currently playing speechSynthesis until it stops speaking
+  // (one cancel per queued tts utterance).
   while (window.speechSynthesis.speaking) {
 
     window.speechSynthesis.cancel();
@@ -122,22 +123,17 @@ const voiceClickEventListener = (e) => {
       // Whisper sounds the best
       // Wobble is really interesting, I like it.
       // Zarvox sounds robotic and slightly bouncy, but works well.
-      // msg.voice = voicesByName["Trinoids"];
-      // msg.voice = voicesByName["Whisper"];
-      msg.voice = voicesByName["Wobble"];
-      // msg.voice = voicesByName["Zarvox"];
+      // const voice = voicesByName["Trinoids"];
+      const voice = voicesByName["Whisper"];
+      // const voice = voicesByName["Wobble"];
+      // const voice = voicesByName["Zarvox"];
+      msg.voice = voice;
       msg.pitch = pitches[kIndex];
       msg.rate = rates[lIndex];
   
       speakIds.push(
         setTimeout(
           () => {
-
-            // TODO: issue to fix: speaking goes on and off,
-            // so it is no longer a reliable place to cancel
-            // the speak queue. Build this reliable place
-            // so adding to the queue can be stopped.
-
             window.speechSynthesis.speak(msg);
           },
           beatToTimeInMilliseconds(whenToSpeakBeats[jIndex] + j, bpm)
