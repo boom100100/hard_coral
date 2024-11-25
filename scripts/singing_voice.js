@@ -1,6 +1,6 @@
-let bpm;
-const setBpm = (newBpm) => {
-  bpm = newBpm;
+let bps;
+const setBps = (newBps) => {
+  bps = newBps;
 };
 let setPattern;
 const setSetPattern = (SetPattern) => {
@@ -47,10 +47,11 @@ const voiceClickEventListener = (e) => {
   const cleanedContent = cleanContent(allContent);
 
   // TODO: move fcn declaration to root of file
-  const beatToTimeInMilliseconds = (startingBeat, bpm) => {
+  const beatToTimeInMilliseconds = (startingBeat, bps) => {
     // startTime = 60 / bpm * startingBeat
     // convert to seconds, find start time, convert to milliseconds
-    return 60 / bpm * startingBeat * 1000;
+    return startingBeat / bps * 1000;
+    // return bps * startingBeat * 1000;
     // beats equation logic
       // if 60 bpm
         // beat 1 = 1 second
@@ -107,7 +108,7 @@ const voiceClickEventListener = (e) => {
         setPattern();
         y++;
       },
-      words.length / 4 * 1000
+      bps * 4000
     );
     setPatternIds.push(setPatternId);
 
@@ -136,7 +137,7 @@ const voiceClickEventListener = (e) => {
           () => {
             window.speechSynthesis.speak(msg);
           },
-          beatToTimeInMilliseconds(whenToSpeakBeats[jIndex] + j, bpm)
+          beatToTimeInMilliseconds(whenToSpeakBeats[jIndex] + j, bps)
         )
       );
   
@@ -149,7 +150,7 @@ const voiceClickEventListener = (e) => {
 
 export {
   voiceClickEventListener,
-  setBpm,
+  setBps,
   setSetPattern,
   reset
 }
