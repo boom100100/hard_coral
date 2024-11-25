@@ -24,18 +24,34 @@ if ('speechSynthesis' in window) {
   
     const srcMusic = chrome.runtime.getURL("scripts/music.js");
     const music = await import(srcMusic);
-    const {musicClickEventListener, bpm, setPattern } = music;
+    const {musicClickEventListener, bpm, setPattern, reset: resetMusic } = music;
     addListener(document.body, 'click', musicClickEventListener, true);
 
     const srcSingingVoice = chrome.runtime.getURL("scripts/singing_voice.js");
     const singingVoice = await import(srcSingingVoice);
-    const {voiceClickEventListener, setBpm, setSetPattern} = singingVoice;
+    const {voiceClickEventListener, setBpm, setSetPattern, reset: resetSinging } = singingVoice;
 
     setBpm(bpm);
     setSetPattern(setPattern);
 
     // listener that triggers playing text to speech on click event
     addListener(document.body, 'click', voiceClickEventListener, true);
+
+    // TODO: maybe one day polling won't be necessary https://stackoverflow.com/questions/3522090/event-when-window-location-href-changes
+    // Must work for SPAs as well.
+    var oldHref = window.location.href;
+    const id = setInterval(
+      () => {
+        if (oldHref === window.location.href) {
+          return;
+        }
+
+        resetMusic();
+        resetSinging();
+        clearInterval(id);
+      },
+      200
+    );
   })();
 
  } else {
