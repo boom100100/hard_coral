@@ -1,5 +1,6 @@
 const previousElementProps = {};
 let currentElement = undefined;
+
 const mouseMoveEventListener = (e) => {
   const {
     previousElement,
@@ -25,6 +26,17 @@ const mouseMoveEventListener = (e) => {
   currentElement.style.color = "#eeeeee";
 }
 
+const mouseLeaveEventListener = (e) => {
+  const {
+    previousElementOriginalBackground,
+    previousElementColor,
+  } = previousElementProps;
+  
+  currentElement.style.background = previousElementOriginalBackground;
+  currentElement.style.color = previousElementColor;
+}
+
 export {
   mouseMoveEventListener,
+  mouseLeaveEventListener,
 }

@@ -17,10 +17,12 @@ if ('speechSynthesis' in window) {
 
     const srcMouseMovement = chrome.runtime.getURL("scripts/mouse_movement.js");
     const mouseMovement = await import(srcMouseMovement);
-    const {mouseMoveEventListener} = mouseMovement;
+    const { mouseMoveEventListener, mouseLeaveEventListener } = mouseMovement;
 
     // listener that styles hovered element and saves its text
     addListener(document, 'mousemove', mouseMoveEventListener);
+    // listener that undoes styling
+    addListener(document, 'mouseleave', mouseLeaveEventListener);
   
     const srcMusic = chrome.runtime.getURL("scripts/music.js");
     const music = await import(srcMusic);
