@@ -37,11 +37,30 @@ const enableLinks = () => {
 };
 
 const disableButtons = () => {
-    buttons.forEach(e => e.toggleAttribute("disabled", true));
+    buttons.forEach(e => {
+        e.addEventListener("dblclick", (event) => {
+            event.preventDefault();
+            e.toggleAttribute("disabled", false);
+            e.click();
+            // on the chance this is not a form/redirect kind of action, disable the button again
+            e.toggleAttribute("disabled", true);
+        });
+        e.toggleAttribute("disabled", true);
+    });
 };
 
 const disableLinks = () => {
-    links.forEach(e => e.element.href = "javascript:");
+  links.forEach(e => {
+    const element = e.element;
+    const disabledHrefValue = "javascript:";
+    element.addEventListener("dblclick", (event) => {
+        element.href = e.originalHref;
+        element.click();
+        // on the chance this is an internal page redirect, disable the link again
+        element.href = disabledHrefValue;
+    });   
+    e.element.href = disabledHrefValue;
+  });
 };
 
 const disableInteraction = () => {
