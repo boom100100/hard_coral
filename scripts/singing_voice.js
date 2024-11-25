@@ -99,17 +99,22 @@ const voiceClickEventListener = (e) => {
     for (let i = 0; i < voices.length; i++) {
       voicesByName[voices[i].name] = voices[i];
     }
-    let y = 0;
+
+    // set another _ seconds of bass rhythm for every n words
+    let z = 0;
+    let n = 4;
+    let seconds = 4 / bps;
     setPattern();
     setPatternId = setInterval(
       () => {
-        if (y >= 4) {
+        if (z >= words.length / n) {
           clearInterval(setPatternId);
+          return;
         }
         setPattern();
-        y++;
+        z++;
       },
-      bps * 4000
+      bps * seconds * 1000
     );
     setPatternIds.push(setPatternId);
 
