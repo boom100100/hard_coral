@@ -80,7 +80,8 @@ const voiceClickEventListener = (e) => {
   const words = cleanedContent.split(" ");
   const whenToSpeakBeats = [0,1,1,1];
   const pitches = [.5, 2];
-  const rates = [1.3, 1.8];
+  const rates = [1.5];
+  // const rates = [1.3, 1.8];
   // some random numbers. timing for this will be way off
   // because api offers unpredictable end times for speech
   // TODO: is pitch variable during pause? No.
@@ -91,7 +92,7 @@ const voiceClickEventListener = (e) => {
         clearInterval(setupId);
         completeSetup(voices);
     }
-}, 10);
+  }, 10);
 
   const completeSetup = (voices) => {
     const voicesByName = {};
@@ -130,7 +131,7 @@ const voiceClickEventListener = (e) => {
       // const voice = voicesByName["Zarvox"];
       msg.voice = voice;
       msg.pitch = pitches[kIndex];
-      msg.rate = rates[lIndex];
+      msg.rate = rates[lIndex] / bps;
   
       speakIds.push(
         setTimeout(
