@@ -17,21 +17,23 @@ if ('speechSynthesis' in window) {
 
     const srcMouseMovement = chrome.runtime.getURL("scripts/mouse_movement.js");
     const mouseMovement = await import(srcMouseMovement);
-    const {mouseMoveEventListener} = mouseMovement;
+    const { mouseMoveEventListener, mouseLeaveEventListener } = mouseMovement;
 
     // listener that styles hovered element and saves its text
     addListener(document, 'mousemove', mouseMoveEventListener);
+    // listener that undoes styling
+    addListener(document, 'mouseleave', mouseLeaveEventListener);
   
     const srcMusic = chrome.runtime.getURL("scripts/music.js");
     const music = await import(srcMusic);
-    const {musicClickEventListener, bpm, setPattern, reset: resetMusic } = music;
+    const {musicClickEventListener, getBps, setPattern, reset: resetMusic } = music;
     addListener(document.body, 'click', musicClickEventListener, true);
 
     const srcSingingVoice = chrome.runtime.getURL("scripts/singing_voice.js");
     const singingVoice = await import(srcSingingVoice);
-    const {voiceClickEventListener, setBpm, setSetPattern, reset: resetSinging } = singingVoice;
+    const {voiceClickEventListener, setBps, setSetPattern, reset: resetSinging } = singingVoice;
 
-    setBpm(bpm);
+    setBps(getBps());
     setSetPattern(setPattern);
 
     // listener that triggers playing text to speech on click event

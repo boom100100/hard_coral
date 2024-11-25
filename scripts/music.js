@@ -34,26 +34,31 @@ var createBongoDrums = () => {
 
 var bongo = createBongoDrums();
 var bpm = 60;
-var pattern = {
-  macho: {
-    createOscillator: bongo.macho,
-    times: [
-      {startTimeOffset: 0, endTime: .03}, // offsetBeat. rename?
-      {startTimeOffset: .5, endTime: .03},
-      {startTimeOffset: 2, endTime: .03},
-      {startTimeOffset: 2.5, endTime: .03},
-    ]
-  },
-  hembra: {
-    createOscillator: bongo.hembra,
-    times: [
-        {startTimeOffset: 1, endTime: .03},
-        {startTimeOffset: 3, endTime: .03},
-    ]
-  },
+var getBps = () => 60 / bpm;
+var getPattern = () => {
+  const bps = getBps();
+  return ({
+    macho: {
+      createOscillator: bongo.macho,
+      times: [
+        {startTimeOffset: bps * 0, endTime: .03}, // offsetBeat. rename?
+        {startTimeOffset: bps * .5, endTime: .03},
+        {startTimeOffset: bps * 2, endTime: .03},
+        {startTimeOffset: bps * 2.5, endTime: .03},
+      ]
+    },
+    hembra: {
+      createOscillator: bongo.hembra,
+      times: [
+          {startTimeOffset: bps * 1, endTime: .03},
+          {startTimeOffset: bps * 3, endTime: .03},
+      ]
+    },
+  });
 };
 var oscillators = [];
 var setPattern = () => {
+  const pattern = getPattern();
   for (let k in pattern) {
     var times = pattern[k].times;
     for (let time of times) {
@@ -79,6 +84,7 @@ var musicClickEventListener = (e) => {
 export {
   musicClickEventListener,
   bpm,
+  getBps,
   setPattern,
   reset,
 }

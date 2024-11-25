@@ -3,9 +3,11 @@
 ## Description
 Generate a musical performance with lyrics consisting of a webpage's content.
 
-The MVP of this project will aim to immediately begin singing a portion of text that the user idicates.
+The MVP of this project will have the following features:
 
-Later iterations will allow the user to choose between singing and non-singing readouts.
+- point and click at highlighted sections of text for the extension to sing
+- double-click to interact with a link or button
+- toggle the extension on and off by clicking the extension button
 
 ## Package
 MacOs has weird compression issues when making .zip files, so use the following command for creating .zip to upload to Google:

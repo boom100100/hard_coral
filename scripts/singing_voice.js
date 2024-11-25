@@ -1,6 +1,6 @@
-let bpm;
-const setBpm = (newBpm) => {
-  bpm = newBpm;
+let bps;
+const setBps = (newBps) => {
+  bps = newBps;
 };
 let setPattern;
 const setSetPattern = (SetPattern) => {
@@ -47,10 +47,11 @@ const voiceClickEventListener = (e) => {
   const cleanedContent = cleanContent(allContent);
 
   // TODO: move fcn declaration to root of file
-  const beatToTimeInMilliseconds = (startingBeat, bpm) => {
+  const beatToTimeInMilliseconds = (startingBeat, bps) => {
     // startTime = 60 / bpm * startingBeat
     // convert to seconds, find start time, convert to milliseconds
-    return 60 / bpm * startingBeat * 1000;
+    return startingBeat / bps * 1000;
+    // return bps * startingBeat * 1000;
     // beats equation logic
       // if 60 bpm
         // beat 1 = 1 second
@@ -79,7 +80,8 @@ const voiceClickEventListener = (e) => {
   const words = cleanedContent.split(" ");
   const whenToSpeakBeats = [0,1,1,1];
   const pitches = [.5, 2];
-  const rates = [1.3, 1.8];
+  const rates = [1.5];
+  // const rates = [1.3, 1.8];
   // some random numbers. timing for this will be way off
   // because api offers unpredictable end times for speech
   // TODO: is pitch variable during pause? No.
@@ -90,24 +92,29 @@ const voiceClickEventListener = (e) => {
         clearInterval(setupId);
         completeSetup(voices);
     }
-}, 10);
+  }, 10);
 
   const completeSetup = (voices) => {
     const voicesByName = {};
     for (let i = 0; i < voices.length; i++) {
       voicesByName[voices[i].name] = voices[i];
     }
-    let y = 0;
+
+    // set another _ seconds of bass rhythm for every n words
+    let z = 0;
+    let n = 4;
+    let seconds = 4 / bps;
     setPattern();
     setPatternId = setInterval(
       () => {
-        if (y >= 4) {
+        if (z >= words.length / n) {
           clearInterval(setPatternId);
+          return;
         }
         setPattern();
-        y++;
+        z++;
       },
-      words.length / 4 * 1000
+      bps * seconds * 1000
     );
     setPatternIds.push(setPatternId);
 
@@ -129,14 +136,14 @@ const voiceClickEventListener = (e) => {
       // const voice = voicesByName["Zarvox"];
       msg.voice = voice;
       msg.pitch = pitches[kIndex];
-      msg.rate = rates[lIndex];
+      msg.rate = rates[lIndex] / bps;
   
       speakIds.push(
         setTimeout(
           () => {
             window.speechSynthesis.speak(msg);
           },
-          beatToTimeInMilliseconds(whenToSpeakBeats[jIndex] + j, bpm)
+          beatToTimeInMilliseconds(whenToSpeakBeats[jIndex] + j, bps)
         )
       );
   
@@ -149,7 +156,7 @@ const voiceClickEventListener = (e) => {
 
 export {
   voiceClickEventListener,
-  setBpm,
+  setBps,
   setSetPattern,
   reset
 }
