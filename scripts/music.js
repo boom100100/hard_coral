@@ -25,8 +25,8 @@ var createBongoDrums = () => {
   }
 
   var bongo = {
-    macho: () => drumConstructor(150, 0),
-    hembra: () => drumConstructor(380, 1),
+    hembra: () => drumConstructor(150, 0),
+    macho: () => drumConstructor(380, 1),
   };
 
   return bongo;
@@ -39,7 +39,7 @@ var getPattern = () => {
   const bps = getBps();
   return ({
     macho: {
-      createOscillator: bongo.macho,
+      createOscillator: bongo.hembra,
       times: [
         {startTimeOffset: bps * 0, endTime: .03}, // offsetBeat. rename?
         {startTimeOffset: bps * .5, endTime: .03},
@@ -48,7 +48,7 @@ var getPattern = () => {
       ]
     },
     hembra: {
-      createOscillator: bongo.hembra,
+      createOscillator: bongo.macho,
       times: [
           {startTimeOffset: bps * 1, endTime: .03},
           {startTimeOffset: bps * 3, endTime: .03},
