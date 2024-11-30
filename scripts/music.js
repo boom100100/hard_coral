@@ -1,78 +1,69 @@
 var context = new (window.AudioContext || window.webkitAudioContext)();
 var merger = context.createChannelMerger(2);
 merger.connect(context.destination);
-var createBongoDrums = () => {
 
-  var drumConstructor = (frequencyValue, mergerChannelNumber) => {
-    // one context per document
-    var osc = context.createOscillator(); // instantiate an oscillator
-    osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
-    osc.frequency.value = frequencyValue; // Hz
-
-    var compressor = context.createDynamicsCompressor();
-    compressor.attack.value = .1;
-    compressor.threshold.value = -40;
-
-    var volume = context.createGain();
-    volume.gain.value = 1;
-
-    osc
-      .connect(compressor)
-      .connect(volume)
-      .connect(merger, 0, mergerChannelNumber);
-
-    return osc;
-  }
-
-  var bongo = {
-    hembra: () => drumConstructor(150, 0),
-    macho: () => drumConstructor(380, 1),
-  };
-
-  return bongo;
+var bongo;
+var setBongoDrums = (drums) => {
+  bongo = drums;
 };
 
-var bongo = createBongoDrums();
 var bpm = 60;
 var getBps = () => 60 / bpm;
+
+var timeoutIds = [];
+var constructPlayback = (drumHead) => {
+  return ({
+    start: (startTime) => {
+      timeoutIds.push(
+        setTimeout(() => {
+          drumHead.currentTime = 0;
+          drumHead.play();
+        }, startTime * 1000)
+      );
+    },
+  });
+};
+
 var getPattern = () => {
   const bps = getBps();
   return ({
-    macho: {
-      createOscillator: bongo.hembra,
+    hembra: {
+      ...constructPlayback(bongo.hembra),
       times: [
-        {startTimeOffset: bps * 0, endTime: .03}, // offsetBeat. rename?
-        {startTimeOffset: bps * .5, endTime: .03},
-        {startTimeOffset: bps * 2, endTime: .03},
-        {startTimeOffset: bps * 2.5, endTime: .03},
+        {startTimeOffset: bps * 0},
+        {startTimeOffset: bps * .5},
+        {startTimeOffset: bps * 2},
+        {startTimeOffset: bps * 2.5},
       ]
     },
-    hembra: {
-      createOscillator: bongo.macho,
+    macho: {
+      ...constructPlayback(bongo.macho),
       times: [
-          {startTimeOffset: bps * 1, endTime: .03},
-          {startTimeOffset: bps * 3, endTime: .03},
+          {startTimeOffset: bps * 1},
+          {startTimeOffset: bps * 3},
       ]
     },
   });
 };
-var oscillators = [];
 var setPattern = () => {
   const pattern = getPattern();
-  for (let k in pattern) {
-    var times = pattern[k].times;
+  for (let drumNameKey in pattern) {
+  const bongoDrum = pattern[drumNameKey];
+  // bongoDrum.load();
+    var times = bongoDrum.times;
     for (let time of times) {
-        var oscillator = pattern[k].createOscillator();
-        oscillators.push(oscillator);
-        oscillator.start(context.currentTime + time.startTimeOffset);
-        oscillator.stop(context.currentTime + time.startTimeOffset + time.endTime);
+      bongoDrum.start(time.startTimeOffset);
     }
   }
 };
 
 var reset = () => {
-  for (let o of oscillators) {
-    o.stop(context.currentTime);
+  for (let id of timeoutIds) {
+    clearTimeout(id);
+  }
+  for (const drumNameKey in bongo) {
+    bongo[drumNameKey].pause();
+    bongo[drumNameKey].currentTime = 0;
   }
 };
 
@@ -85,6 +76,7 @@ export {
   musicClickEventListener,
   bpm,
   getBps,
+  setBongoDrums,
   setPattern,
   reset,
 }
