@@ -32,15 +32,25 @@ var getPattern = () => {
       times: [
         {startTimeOffset: bps * 0},
         {startTimeOffset: bps * .5},
+        {startTimeOffset: bps * .75},
+        {startTimeOffset: bps * 1.5},
         {startTimeOffset: bps * 2},
-        {startTimeOffset: bps * 2.5},
+        {startTimeOffset: bps * 2.75},
+        {startTimeOffset: bps * 3.5},
       ]
     },
     macho: {
       ...constructPlayback(bongo.macho),
       times: [
+          {startTimeOffset: bps * .25},
           {startTimeOffset: bps * 1},
+          {startTimeOffset: bps * 1.25},
+          {startTimeOffset: bps * 1.75},
+          {startTimeOffset: bps * 2.25},
+          {startTimeOffset: bps * 2.5},
           {startTimeOffset: bps * 3},
+          {startTimeOffset: bps * 3.25},
+          {startTimeOffset: bps * 3.75},
       ]
     },
   });
