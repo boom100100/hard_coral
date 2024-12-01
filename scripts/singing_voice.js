@@ -92,8 +92,7 @@ const voiceClickEventListener = (e) => {
       voicesByName[voices[i].name] = voices[i];
     }
 
-    // how frequently the pattern should loop: calculated as expected duration
-    // of pattern (from getPattern) divided by bps
+    // how frequently the pattern should loop: (beats in pattern [from getPattern]) / bps
     let loopDuration = 4 / bps;
     setPattern();
     setPatternId = setInterval(
