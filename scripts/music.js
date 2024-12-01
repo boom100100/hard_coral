@@ -7,8 +7,8 @@ var setBongoDrums = (drums) => {
   bongo = drums;
 };
 
-var bpm = 60;
-var getBps = () => 60 / bpm;
+var bpm = 120;
+var getBps = () => bpm / 60;
 
 var timeoutIds = [];
 var constructPlayback = (drumHead) => {
@@ -30,27 +30,27 @@ var getPattern = () => {
     hembra: {
       ...constructPlayback(bongo.hembra),
       times: [
-        {startTimeOffset: bps * 0},
-        {startTimeOffset: bps * .5},
-        {startTimeOffset: bps * .75},
-        {startTimeOffset: bps * 1.5},
-        {startTimeOffset: bps * 2},
-        {startTimeOffset: bps * 2.75},
-        {startTimeOffset: bps * 3.5},
+        {startTimeOffset: 0 / bps},
+        {startTimeOffset: .5 / bps},
+        {startTimeOffset: .75 / bps},
+        {startTimeOffset: 1.5 / bps},
+        {startTimeOffset: 2 / bps},
+        {startTimeOffset: 2.75 / bps},
+        {startTimeOffset: 3.5 / bps},
       ]
     },
     macho: {
       ...constructPlayback(bongo.macho),
       times: [
-          {startTimeOffset: bps * .25},
-          {startTimeOffset: bps * 1},
-          {startTimeOffset: bps * 1.25},
-          {startTimeOffset: bps * 1.75},
-          {startTimeOffset: bps * 2.25},
-          {startTimeOffset: bps * 2.5},
-          {startTimeOffset: bps * 3},
-          {startTimeOffset: bps * 3.25},
-          {startTimeOffset: bps * 3.75},
+          {startTimeOffset: .25 / bps},
+          {startTimeOffset: 1 / bps},
+          {startTimeOffset: 1.25 / bps},
+          {startTimeOffset: 1.75 / bps},
+          {startTimeOffset: 2.25 / bps},
+          {startTimeOffset: 2.5 / bps},
+          {startTimeOffset: 3 / bps},
+          {startTimeOffset: 3.25 / bps},
+          {startTimeOffset: 3.75 / bps},
       ]
     },
   });
