@@ -70,11 +70,13 @@ const voiceClickEventListener = (e) => {
         // 60 / 120 * 2 = 1
   };
 
-  let i = 0;
   let j = 0;
   let k = 0;
   let l = 0;
   const words = cleanedContent.split(" ");
+  const wordCount = words.length;
+  let spokenWordsCount = 0;
+  
   const whenToSpeakBeats = [0,1,1,1];
   const pitches = [1];
   const rates = [1.25, 1.25, .5, 1.25, 1.25, 1.25, 1.25, .5];
@@ -94,23 +96,18 @@ const voiceClickEventListener = (e) => {
       voicesByName[voices[i].name] = voices[i];
     }
 
-    // set another _ seconds of bass rhythm for every n words
-    let z = 0;
-    let wordsPerBeatInterval = bps < .75 ? 
-      3.4 :
-      bps <= 2 ? 
-      3 :
-      2.8 ; // TODO: this calculation is not very precise. Overall needed pattern length must be derived from a calculation of the time needed to say each word at a given rate, starting at a specific startTime.
-    let loopDuration = 4 / bps; // how frequently the pattern should loop: calculated as expected duration of pattern (from getPattern) divided by bps
+    // how frequently the pattern should loop: calculated as expected duration
+    // of pattern (from getPattern) divided by bps
+    let loopDuration = 4 / bps;
     setPattern();
     setPatternId = setInterval(
       () => {
-        if (z > words.length / wordsPerBeatInterval) {
+        // Stop adding to the pattern duration after all words are spoken.
+        if (wordCount === spokenWordsCount) {
           clearInterval(setPatternId);
           return;
         }
         setPattern();
-        z++;
       },
       loopDuration * 1000
     );
@@ -118,6 +115,7 @@ const voiceClickEventListener = (e) => {
 
     for (let word of words) {
       const msg = new SpeechSynthesisUtterance(word);
+      msg.addEventListener("end", (_) => spokenWordsCount++);
   
       const jIndex = j % whenToSpeakBeats.length;
       const kIndex = k % pitches.length;
@@ -188,7 +186,7 @@ const voiceClickEventListener = (e) => {
       msg.rate = isShort ?
         1.5 * bps :
         isLong ? .5 * bps: rates[lIndex] * bps;
-      
+
       speakIds.push(
         setTimeout(
           () => {
