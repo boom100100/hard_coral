@@ -1,7 +1,7 @@
 {
   "name": "Hard Coral",
   "description": "An extension that generates music and sings the content of a page.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "background": {
         "service_worker": "background.js"
     },
@@ -21,6 +21,8 @@
     {
       "matches": ["<all_urls>"],
       "resources": [
+        "audio/bongo_hembra.wav",
+        "audio/bongo_macho.wav",
         "scripts/mouse_movement.js",
         "scripts/music.js",
         "scripts/singing_voice.js",

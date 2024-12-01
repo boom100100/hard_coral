@@ -23,11 +23,20 @@ if ('speechSynthesis' in window) {
     addListener(document, 'mousemove', mouseMoveEventListener);
     // listener that undoes styling
     addListener(document, 'mouseleave', mouseLeaveEventListener);
-  
+
+    const hembraSource = chrome.runtime.getURL("audio/bongo_hembra.wav");
+    const machoSource = chrome.runtime.getURL("audio/bongo_macho.wav");
+    
+    var drums = {
+      hembra: new Audio(hembraSource),
+      macho: new Audio(machoSource),
+    };
+
     const srcMusic = chrome.runtime.getURL("scripts/music.js");
     const music = await import(srcMusic);
-    const {musicClickEventListener, getBps, setPattern, reset: resetMusic } = music;
+    const {musicClickEventListener, getBps, setBongoDrums, setPattern, reset: resetMusic } = music;
     addListener(document.body, 'click', musicClickEventListener, true);
+    setBongoDrums(drums);
 
     const srcSingingVoice = chrome.runtime.getURL("scripts/singing_voice.js");
     const singingVoice = await import(srcSingingVoice);
