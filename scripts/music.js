@@ -7,7 +7,7 @@ var setBongoDrums = (drums) => {
   bongo = drums;
 };
 
-var bpm = 120;
+var bpm = 60;
 var getBps = () => bpm / 60;
 
 var timeoutIds = [];
