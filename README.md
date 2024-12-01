@@ -1,7 +1,7 @@
 # Hard Coral
 
 ## Description
-Generate a musical performance with lyrics consisting of a webpage's content.
+A Google Chrome extension that generates a musical performance with lyrics consisting of a webpage's text.
 
 The MVP of this project will have the following features:
 
@@ -10,7 +10,7 @@ The MVP of this project will have the following features:
 - toggle the extension on and off by clicking the extension button
 
 ## Package
-MacOs has weird compression issues when making .zip files, so use the following command for creating .zip to upload to Google:
+MacOs has weird compression issues when making .zip files, so use the following command for creating the .zip to upload to Google:
 
     zip -r .chrome_extensions_assets/hard_coral0.0.v.zip *
 
