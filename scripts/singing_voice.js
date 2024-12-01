@@ -79,8 +79,11 @@ const voiceClickEventListener = (e) => {
   let l = 0;
   const words = cleanedContent.split(" ");
   const whenToSpeakBeats = [0,1,1,1];
-  const pitches = [.5, 2];
-  const rates = [1.5];
+  // const pitches = [.5,.5,2,.5];
+  const pitches = [1];
+  // const rates = [.25,.25,.25,1,1,1,1,.25,]
+  // Note: all rate changes affect how many beat loops should be queued.
+  const rates = [1.25, 1.25, .5, 1.25, 1.25, 1.25, 1.25, .5];
   // const rates = [1.3, 1.8];
   // some random numbers. timing for this will be way off
   // because api offers unpredictable end times for speech
@@ -102,19 +105,23 @@ const voiceClickEventListener = (e) => {
 
     // set another _ seconds of bass rhythm for every n words
     let z = 0;
-    let n = 4;
-    let seconds = 4 / bps;
+    let wordsPerBeatInterval = bps < .75 ? 
+      3.4 :
+      bps <= 2 ? 
+      3 :
+      2.8 ; // TODO: this calculation is not very precise. Overall needed attern length must be derived from a calculation of the time needed to say each word at a given rate, starting at a specific startTime.
+    let loopDuration = 4 / bps; // how frequently the pattern should loop: calculated as expected duration of pattern (from getPattern) divided by bps
     setPattern();
     setPatternId = setInterval(
       () => {
-        if (z >= words.length / n) {
+        if (z > words.length / wordsPerBeatInterval) {
           clearInterval(setPatternId);
           return;
         }
         setPattern();
         z++;
       },
-      bps * seconds * 1000
+      loopDuration * 1000
     );
     setPatternIds.push(setPatternId);
 
@@ -125,19 +132,73 @@ const voiceClickEventListener = (e) => {
       const kIndex = k % pitches.length;
       const lIndex = l % rates.length;
   
+      // const voice = voicesByName["Aaron"]; // 
+      // const voice = voicesByName["Daniel (English (United Kingdom))"]; // 
+      // const voice = voicesByName["Eddy (English (United States))"]; // 
+      // const voice = voicesByName["Ellen"]; // 
+      // const voice = voicesByName["Fred"]; // 
+      // const voice = voicesByName["Gordon"]; // 
+      // const voice = voicesByName["Grandma (English (United Kingdom))"]; // 
+      // const voice = voicesByName["Grandma (English (United States))"]; // 
+      // const voice = voicesByName["Grandpa (English (United Kingdom))"]; // 
+      // const voice = voicesByName["Grandpa (English (United States))"]; // 
+      // const voice = voicesByName["Joana"]; // 
+      // const voice = voicesByName["Junior"]; // 
+      // const voice = voicesByName["Kanya"]; // 
+      // const voice = voicesByName["Li-Mu"]; // 
+      // const voice = voicesByName["Luciana"]; // 
+      // const voice = voicesByName["Marie"]; // 
+      // const voice = voicesByName["Martha"]; // 
+      // const voice = voicesByName["Milena"]; // 
+      // const voice = voicesByName["Moira"]; // 
+      // const voice = voicesByName["Ralph"]; // 
+      // const voice = voicesByName["Reed (English (United Kingdom))"]; // 
+      // const voice = voicesByName["Reed (English (United States))"]; // 
+      // const voice = voicesByName["Rishi"]; // liked, is deep, can vary  pitch
+      // const voice = voicesByName["Rocko (English (United Kingdom))"]; // 
+      const voice = voicesByName["Rocko (English (United States))"]; // 
+      // const voice = voicesByName["Satu"]; // 
+      // const voice = voicesByName["Shelley (English (United Kingdom))"]; // 
+      // const voice = voicesByName["Shelley (English (United States))"]; // 
+      // const voice = voicesByName["Sinji"]; // 
+      // const voice = voicesByName["Superstar"]; // 
+      // const voice = voicesByName["Tessa"]; // 
+      // const voice = voicesByName["Xander"]; // 
+      // const voice = voicesByName["Yelda"]; // 
+      // const voice = voicesByName["Zosia"]; // 
+      // const voice = voicesByName["Zuzana"]; //
       
+      // can the pitch for the voice vary?
+      // const voice = voicesByName["Albert"]; // y
+      // const voice = voicesByName["Bells"]; // n
+      // const voice = voicesByName["Boing"]; // y
+      // const voice = voicesByName["Cellos"]; // y
+      // const voice = voicesByName["Jester"]; // n
+      // const voice = voicesByName["Kyoko"]; // y
+      // const voice = voicesByName["O-Ren"]; // y
+      // const voice = voicesByName["Organ"]; // y
       // Trinoids sounds horrible
+      // Albert sounds horrible over drums
+      // Boing sounds horrible over drums
+      // Organ sounds horrible over drums
       // Whisper sounds the best
       // Wobble is really interesting, I like it.
       // Zarvox sounds robotic and slightly bouncy, but works well.
-      // const voice = voicesByName["Trinoids"];
-      const voice = voicesByName["Whisper"];
-      // const voice = voicesByName["Wobble"];
-      // const voice = voicesByName["Zarvox"];
+      // const voice = voicesByName["Trinoids"]; // y
+      // const voice = voicesByName["Whisper"]; // n
+      // const voice = voicesByName["Wobble"]; // not sure, seems like no
+      // const voice = voicesByName["Zarvox"]; // y
       msg.voice = voice;
-      msg.pitch = pitches[kIndex];
-      msg.rate = rates[lIndex] / bps;
-  
+      const isShort = msg.text.length <= 3;
+      const isLong = msg.text.length > 10;
+      msg.pitch = isShort ?
+        1 :
+        isLong ? .5: pitches[kIndex];
+      // msg.rate = rates[lIndex];
+      msg.rate = isShort ?
+        1.5 * bps :
+        isLong ? .5 * bps: rates[lIndex] * bps;
+      
       speakIds.push(
         setTimeout(
           () => {
