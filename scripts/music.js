@@ -30,6 +30,7 @@ var getPattern = () => {
     hembra: {
       ...constructPlayback(bongo.hembra),
       times: [
+        // this offset equals beat / beat per seconds
         {startTimeOffset: 0 / bps},
         {startTimeOffset: .5 / bps},
         {startTimeOffset: .75 / bps},
