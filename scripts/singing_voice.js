@@ -26,7 +26,6 @@ var reset = () => {
   // Cancel currently playing speechSynthesis until it stops speaking
   // (one cancel per queued tts utterance).
   while (window.speechSynthesis.speaking) {
-
     window.speechSynthesis.cancel();
   }
 };
@@ -48,8 +47,6 @@ const voiceClickEventListener = (e) => {
 
   // TODO: move fcn declaration to root of file
   const beatToTimeInMilliseconds = (startingBeat, bps) => {
-    // startTime = 60 / bpm * startingBeat
-    // convert to seconds, find start time, convert to milliseconds
     return startingBeat / bps * 1000;
     // return bps * startingBeat * 1000;
     // beats equation logic
@@ -79,14 +76,8 @@ const voiceClickEventListener = (e) => {
   let l = 0;
   const words = cleanedContent.split(" ");
   const whenToSpeakBeats = [0,1,1,1];
-  // const pitches = [.5,.5,2,.5];
   const pitches = [1];
-  // const rates = [.25,.25,.25,1,1,1,1,.25,]
-  // Note: all rate changes affect how many beat loops should be queued.
   const rates = [1.25, 1.25, .5, 1.25, 1.25, 1.25, 1.25, .5];
-  // const rates = [1.3, 1.8];
-  // some random numbers. timing for this will be way off
-  // because api offers unpredictable end times for speech
   // TODO: is pitch variable during pause? No.
   // is rate variable?
   const setupId = setInterval(() => {
@@ -109,7 +100,7 @@ const voiceClickEventListener = (e) => {
       3.4 :
       bps <= 2 ? 
       3 :
-      2.8 ; // TODO: this calculation is not very precise. Overall needed attern length must be derived from a calculation of the time needed to say each word at a given rate, starting at a specific startTime.
+      2.8 ; // TODO: this calculation is not very precise. Overall needed pattern length must be derived from a calculation of the time needed to say each word at a given rate, starting at a specific startTime.
     let loopDuration = 4 / bps; // how frequently the pattern should loop: calculated as expected duration of pattern (from getPattern) divided by bps
     setPattern();
     setPatternId = setInterval(
@@ -169,7 +160,7 @@ const voiceClickEventListener = (e) => {
       // const voice = voicesByName["Zuzana"]; //
       
       // can the pitch for the voice vary?
-      // const voice = voicesByName["Albert"]; // y
+      // const voice = voicesByName["Albert"]; // y, it can vary
       // const voice = voicesByName["Bells"]; // n
       // const voice = voicesByName["Boing"]; // y
       // const voice = voicesByName["Cellos"]; // y
@@ -194,7 +185,6 @@ const voiceClickEventListener = (e) => {
       msg.pitch = isShort ?
         1 :
         isLong ? .5: pitches[kIndex];
-      // msg.rate = rates[lIndex];
       msg.rate = isShort ?
         1.5 * bps :
         isLong ? .5 * bps: rates[lIndex] * bps;
