@@ -75,6 +75,7 @@ const voiceClickEventListener = (e) => {
   
   const whenToSpeakBeats = [0,1,1,1];
   const pitches = [1];
+  const noteToPitch = {};
   const rates = [1.25, 1.25, .5, 1.25, 1.25, 1.25, 1.25, .5];
   // TODO: is pitch variable during pause? No.
   // is rate variable?
