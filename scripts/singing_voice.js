@@ -47,9 +47,10 @@ const voiceClickEventListener = (e, shouldPlay) => {
 
   const currentElement = document.elementFromPoint(e.clientX, e.clientY);
 
-  // if (!shouldPlay(currentElement)) {
-  //   return;
-  // }
+  if (shouldPlay && !shouldPlay(currentElement)) {
+    console.log("returning early");
+    return;
+  }
 
   const bps = getBps();
   const cleanContent = (content) => {
@@ -124,10 +125,8 @@ const voiceClickEventListener = (e, shouldPlay) => {
     const notePitchMapping = voiceUriToNotePitchMapping[selectedVoiceURI];
     const getPitch = (note) => notePitchMapping[note] ?? 1;
     const voice = voicesByUri[selectedVoiceURI];
-    // const voice = voicesByUri["Rocko (English (United States))"];
 
-    const whenToSpeakBeats = [0,1,1,1];
-    // test: hot cross buns (but long words will throw off the rhythm)
+    const whenToSpeakBeats = [0];
     const pitches = [
       getPitch("C3"), getPitch("D3"), getPitch("E3"), getPitch("F3"), 
       getPitch("G3"), getPitch("A3"), getPitch("B3"), getPitch("C4"), 
