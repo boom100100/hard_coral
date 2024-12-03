@@ -34,24 +34,55 @@ if ('speechSynthesis' in window) {
 
     const srcMusic = chrome.runtime.getURL("scripts/music.js");
     const music = await import(srcMusic);
-    const {musicClickEventListener, getBps, setBongoDrums, setPattern, reset: resetMusic } = music;
-    addListener(document.body, 'click', musicClickEventListener, true);
+    const {
+      musicClickEventListener, getBps, setBpm, setBongoDrums, setPattern, reset: resetMusic
+    } = music;
+    // listener that resets beat on click event
+    addListener(document.body, "click", musicClickEventListener, true);
     setBongoDrums(drums);
 
     const srcNoteMapper = chrome.runtime.getURL("scripts/note_mapper.js");
     const noteMapper = await import(srcNoteMapper);
-    const { voiceUriToNotePitchMapping } = noteMapper;
+    const { voiceOptions, voiceUriToNotePitchMapping } = noteMapper;
+
+    const srcVoiceSelector = chrome.runtime.getURL("scripts/selectors.js");
+    const voiceSelector = await import(srcVoiceSelector);
+    const {
+      setSetBpm, setSetSelectedVoiceURI, setVoiceOptions, selectedVoiceURI
+    } = voiceSelector;
+
+    setVoiceOptions(voiceOptions);
+    setSetBpm(setBpm);
 
     const srcSingingVoice = chrome.runtime.getURL("scripts/singing_voice.js");
     const singingVoice = await import(srcSingingVoice);
-    const {voiceClickEventListener, setBps, setMapping, setSetPattern, reset: resetSinging } = singingVoice;
+    const {
+      voiceClickEventListener, setGetBps, setMapping, setSelectedVoiceURI, setSetPattern, reset: resetSinging
+    } = singingVoice;
 
-    setBps(getBps());
+    setSetSelectedVoiceURI(setSelectedVoiceURI);
+    setGetBps(getBps);
     setMapping(voiceUriToNotePitchMapping);
+    setSelectedVoiceURI(selectedVoiceURI);
     setSetPattern(setPattern);
 
     // listener that triggers playing text to speech on click event
-    addListener(document.body, 'click', voiceClickEventListener, true);
+    // const singListener = (e) => {
+    //   // Note: moving the settingsElements and shouldPlay constants
+    //   // outside of this function where they are used caused
+    //   // some indeterminate behavior. Reloading the extension
+    //   // sometimes resulted in the music failing to start. There
+    //   // was likely some race condition, perhaps causing the UI to
+    //   // load after getElementById was called.
+    //   const settingsElements = Array.from(
+    //     document.getElementById(
+    //       "96005210-8bc2-48ca-9b13-5818a7a9be20"
+    //     ).querySelectorAll("*")
+    //   );
+    //   const shouldPlay = currentElement => !settingsElements.includes(currentElement);
+    //   voiceClickEventListener(e, shouldPlay);
+    // };
+    addListener(document.body, "click", voiceClickEventListener, true);
 
     // TODO: maybe one day polling won't be necessary https://stackoverflow.com/questions/3522090/event-when-window-location-href-changes
     // Must work for SPAs as well.

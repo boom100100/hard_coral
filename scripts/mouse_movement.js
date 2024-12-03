@@ -9,7 +9,10 @@ const mouseMoveEventListener = (e) => {
   } = previousElementProps;
   // saves element with target text
   currentElement = document.elementFromPoint(e.clientX, e.clientY);
-  if (previousElement === currentElement) {
+  if (
+    previousElement === currentElement
+    || currentElement.id === "96005210-8bc2-48ca-9b13-5818a7a9be20" // id for settings UI
+  ) {
     return;
   }
 

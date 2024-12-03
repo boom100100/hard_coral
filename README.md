@@ -8,8 +8,6 @@ Features:
 - point and click at highlighted sections of text for the extension to sing
 - double-click to interact with a link or button
 - toggle the extension on and off by clicking the extension button
-
-Coming Soon:
 - user controls for speed and voice
 
 ## Package
