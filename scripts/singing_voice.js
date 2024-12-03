@@ -116,9 +116,7 @@ const voiceClickEventListener = (e) => {
     setPatternIds.push(setPatternId);
 
     const notePitchMapping = voiceUriToNotePitchMapping[selectedVoiceURI];
-    const getPitch = (note) => {
-      notePitchMapping[note] ?? 1;
-    };
+    const getPitch = (note) => notePitchMapping[note] ?? 1;
     const voice = voicesByUri[selectedVoiceURI];
     // const voice = voicesByUri["Rocko (English (United States))"];
 
