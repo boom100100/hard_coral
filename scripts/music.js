@@ -12,7 +12,7 @@ var setBpm = (newBpm) => {
   bpm = newBpm;
 };
 
-var getBps = () => bpm / 60;
+var getBps = () => bpm === undefined ? undefined : bpm / 60;
 
 var timeoutIds = [];
 var constructPlayback = (drumHead) => {
