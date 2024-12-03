@@ -47,9 +47,9 @@ const voiceClickEventListener = (e, shouldPlay) => {
 
   const currentElement = document.elementFromPoint(e.clientX, e.clientY);
 
-  if (!shouldPlay(currentElement)) {
-    return;
-  }
+  // if (!shouldPlay(currentElement)) {
+  //   return;
+  // }
 
   const bps = getBps();
   const cleanContent = (content) => {

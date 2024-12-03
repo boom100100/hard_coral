@@ -66,17 +66,17 @@ if ('speechSynthesis' in window) {
     setSelectedVoiceURI(selectedVoiceURI);
     setSetPattern(setPattern);
 
-    const settingElements = Array.from(
-      document.getElementById(
-        "96005210-8bc2-48ca-9b13-5818a7a9be20"
-      ).querySelectorAll("*")
-    );
-    const shouldPlay = currentElement => !settingElements.includes(currentElement);
-    // listener that triggers playing text to speech on click event
-    const singListener = (e) => {
-      voiceClickEventListener(e, shouldPlay);
-    };
-    addListener(document.body, "click", singListener, true);
+    // const settingElements = Array.from(
+    //   document.getElementById(
+    //     "96005210-8bc2-48ca-9b13-5818a7a9be20"
+    //   ).querySelectorAll("*")
+    // );
+    // const shouldPlay = currentElement => !settingElements.includes(currentElement);
+    // // listener that triggers playing text to speech on click event
+    // const singListener = (e) => {
+    //   voiceClickEventListener(e, shouldPlay);
+    // };
+    addListener(document.body, "click", voiceClickEventListener, true);
 
     // TODO: maybe one day polling won't be necessary https://stackoverflow.com/questions/3522090/event-when-window-location-href-changes
     // Must work for SPAs as well.
