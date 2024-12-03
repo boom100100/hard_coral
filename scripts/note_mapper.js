@@ -59,8 +59,8 @@ const voiceUriToNotePitchMapping = {
 };
 
 const voiceOptions = [
-  goodNewsURI,
   whisperURI,
+  goodNewsURI,
 ];
 
 export {
