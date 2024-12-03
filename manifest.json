@@ -26,6 +26,7 @@
         "scripts/mouse_movement.js",
         "scripts/music.js",
         "scripts/note_mapper.js",
+        "scripts/selectors.js",
         "scripts/singing_voice.js",
         "scripts/toggle_interaction.js"
       ]
