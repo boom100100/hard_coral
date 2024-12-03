@@ -2,6 +2,12 @@ let bps;
 const setBps = (newBps) => {
   bps = newBps;
 };
+
+let voiceUriToNotePitchMapping;
+const setMapper = (newVoiceUriToNotePitchMapping) => {
+  voiceUriToNotePitchMapping = newVoiceUriToNotePitchMapping;
+};
+
 let setPattern;
 const setSetPattern = (SetPattern) => {
   setPattern = SetPattern;
@@ -66,19 +72,6 @@ const voiceClickEventListener = (e) => {
         // 60 / 120 * 2 = 1
   };
 
-  let j = 0;
-  let k = 0;
-  let l = 0;
-  const words = cleanedContent.split(" ");
-  const wordCount = words.length;
-  let spokenWordsCount = 0;
-  
-  const whenToSpeakBeats = [0,1,1,1];
-  const pitches = [1];
-  const noteToPitch = {};
-  const rates = [1.25, 1.25, .5, 1.25, 1.25, 1.25, 1.25, .5];
-  // TODO: is pitch variable during pause? No.
-  // is rate variable?
   const setupId = setInterval(() => {
     const voices = window.speechSynthesis.getVoices();
     if (voices.length !== 0) {
@@ -88,10 +81,17 @@ const voiceClickEventListener = (e) => {
   }, 10);
 
   const completeSetup = (voices) => {
-    const voicesByName = {};
+    const voicesByUri = {};
     for (let i = 0; i < voices.length; i++) {
-      voicesByName[voices[i].name] = voices[i];
+      voicesByUri[voices[i].voiceURI] = voices[i];
     }
+
+    let j = 0;
+    let k = 0;
+    let l = 0;
+    const words = cleanedContent.split(" ");
+    const wordCount = words.length;
+    let spokenWordsCount = 0;
 
     // how frequently the pattern should loop: (beats in pattern [from getPattern]) / bps
     let loopDuration = 4 / bps;
@@ -109,6 +109,22 @@ const voiceClickEventListener = (e) => {
     );
     setPatternIds.push(setPatternId);
 
+    // TODO: let user select this
+    const voiceURI = "Good News";
+    const notePitchMapping = voiceUriToNotePitchMapping[voiceURI];
+    const voice = voicesByUri[voiceURI];
+    // const voice = voicesByUri["Rocko (English (United States))"];
+
+    const whenToSpeakBeats = [0,1,1,1];
+    // test: hot cross buns (but long words will throw off the rhythm)
+    const pitches = [
+      notePitchMapping["C3"], notePitchMapping["D3"], notePitchMapping["E3"], notePitchMapping["F3"], 
+      notePitchMapping["G3"], notePitchMapping["A3"], notePitchMapping["B3"], notePitchMapping["C4"], 
+    ];
+    const rates = [1];
+    // TODO: is pitch variable during pause? No.
+    // is rate variable?
+    
     for (let word of words) {
       const msg = new SpeechSynthesisUtterance(word);
       msg.addEventListener("end", (_) => spokenWordsCount++);
@@ -116,73 +132,9 @@ const voiceClickEventListener = (e) => {
       const jIndex = j % whenToSpeakBeats.length;
       const kIndex = k % pitches.length;
       const lIndex = l % rates.length;
-  
-      // some potentially useful voice names:
-        // const voice = voicesByName["Aaron"]; // 
-        // const voice = voicesByName["Daniel (English (United Kingdom))"]; // 
-        // const voice = voicesByName["Eddy (English (United States))"]; // 
-        // const voice = voicesByName["Ellen"]; // 
-        // const voice = voicesByName["Fred"]; // 
-        // const voice = voicesByName["Gordon"]; // 
-        // const voice = voicesByName["Grandma (English (United Kingdom))"]; // 
-        // const voice = voicesByName["Grandma (English (United States))"]; // 
-        // const voice = voicesByName["Grandpa (English (United Kingdom))"]; // 
-        // const voice = voicesByName["Grandpa (English (United States))"]; // 
-        // const voice = voicesByName["Joana"]; // 
-        // const voice = voicesByName["Junior"]; // 
-        // const voice = voicesByName["Kanya"]; // 
-        // const voice = voicesByName["Li-Mu"]; // 
-        // const voice = voicesByName["Luciana"]; // 
-        // const voice = voicesByName["Marie"]; // 
-        // const voice = voicesByName["Martha"]; // 
-        // const voice = voicesByName["Milena"]; // 
-        // const voice = voicesByName["Moira"]; // 
-        // const voice = voicesByName["Ralph"]; // 
-        // const voice = voicesByName["Reed (English (United Kingdom))"]; // 
-        // const voice = voicesByName["Reed (English (United States))"]; // 
-        // const voice = voicesByName["Rishi"]; // liked, is deep, can vary  pitch
-        // const voice = voicesByName["Rocko (English (United Kingdom))"]; // 
-        // const voice = voicesByName["Satu"]; // 
-        // const voice = voicesByName["Shelley (English (United Kingdom))"]; // 
-        // const voice = voicesByName["Shelley (English (United States))"]; // 
-        // const voice = voicesByName["Sinji"]; // 
-        // const voice = voicesByName["Superstar"]; // 
-        // const voice = voicesByName["Tessa"]; // 
-        // const voice = voicesByName["Xander"]; // 
-        // const voice = voicesByName["Yelda"]; // 
-        // const voice = voicesByName["Zosia"]; // 
-        // const voice = voicesByName["Zuzana"]; //
-        
-        // can the pitch for the voice vary?
-        // const voice = voicesByName["Albert"]; // y, it can vary
-        // const voice = voicesByName["Bells"]; // n
-        // const voice = voicesByName["Boing"]; // y
-        // const voice = voicesByName["Cellos"]; // y
-        // const voice = voicesByName["Jester"]; // n
-        // const voice = voicesByName["Kyoko"]; // y
-        // const voice = voicesByName["O-Ren"]; // y
-        // const voice = voicesByName["Organ"]; // y
-        // Trinoids sounds horrible
-        // Albert sounds horrible over drums
-        // Boing sounds horrible over drums
-        // Organ sounds horrible over drums
-        // Whisper sounds the best
-        // Wobble is really interesting, I like it.
-        // Zarvox sounds robotic and slightly bouncy, but works well.
-        // const voice = voicesByName["Trinoids"]; // y
-        // const voice = voicesByName["Whisper"]; // n
-        // const voice = voicesByName["Wobble"]; // not sure, seems like no
-        // const voice = voicesByName["Zarvox"]; // y
-      const voice = voicesByName["Rocko (English (United States))"];
       msg.voice = voice;
-      const isShort = msg.text.length <= 3;
-      const isLong = msg.text.length > 10;
-      msg.pitch = isShort ?
-        1 :
-        isLong ? .5: pitches[kIndex];
-      msg.rate = isShort ?
-        1.5 * bps :
-        isLong ? .5 * bps: rates[lIndex] * bps;
+      msg.pitch = pitches[kIndex];
+      msg.rate = rates[lIndex] * bps;
 
       speakIds.push(
         setTimeout(
@@ -203,6 +155,7 @@ const voiceClickEventListener = (e) => {
 export {
   voiceClickEventListener,
   setBps,
+  setMapper,
   setSetPattern,
   reset
 }
