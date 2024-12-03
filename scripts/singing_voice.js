@@ -1,6 +1,6 @@
-let bps;
-const setBps = (newBps) => {
-  bps = newBps;
+let getBps;
+const setGetBps = (newGetBps) => {
+  getBps = newGetBps;
 };
 
 let voiceUriToNotePitchMapping;
@@ -44,6 +44,7 @@ const voiceClickEventListener = (e) => {
   // prevent overlapping voices
   reset();
 
+  const bps = getBps();
   const currentElement = document.elementFromPoint(e.clientX, e.clientY);
   const allContent = currentElement.innerText;
 
@@ -159,7 +160,7 @@ const voiceClickEventListener = (e) => {
 
 export {
   voiceClickEventListener,
-  setBps,
+  setGetBps,
   setMapping,
   setSelectedVoiceURI,
   setSetPattern,
