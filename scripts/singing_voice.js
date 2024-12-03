@@ -40,19 +40,23 @@ var reset = () => {
   }
 };
 
-const voiceClickEventListener = (e) => {
+const voiceClickEventListener = (e, shouldPlay) => {
+  console.log("reached");
   // prevent overlapping voices
   reset();
 
-  const bps = getBps();
   const currentElement = document.elementFromPoint(e.clientX, e.clientY);
-  const allContent = currentElement.innerText;
 
+  if (!shouldPlay(currentElement)) {
+    return;
+  }
+
+  const bps = getBps();
   const cleanContent = (content) => {
     return content;
   }
 
-  const cleanedContent = cleanContent(allContent);
+  const cleanedContent = cleanContent(currentElement.innerText);
 
   // TODO: move fcn declaration to root of file
   const beatToTimeInMilliseconds = (startingBeat, bps) => {
@@ -80,6 +84,7 @@ const voiceClickEventListener = (e) => {
   };
 
   const setupId = setInterval(() => {
+    // This interval is required to wait for the async function `getVoices` to resolve
     const voices = window.speechSynthesis.getVoices();
     if (voices.length !== 0) {
         clearInterval(setupId);
