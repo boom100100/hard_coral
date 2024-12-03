@@ -46,19 +46,21 @@ if ('speechSynthesis' in window) {
 
     const srcVoiceSelector = chrome.runtime.getURL("scripts/selectors.js");
     const voiceSelector = await import(srcVoiceSelector);
-    const { bpm, setVoiceOptions, selectedVoiceURI } = voiceSelector;
+    const {
+      setSetBpm, setSetSelectedVoiceURI, setVoiceOptions, selectedVoiceURI
+    } = voiceSelector;
 
     setVoiceOptions(voiceOptions);
+    setSetBpm(setBpm);
 
     const srcSingingVoice = chrome.runtime.getURL("scripts/singing_voice.js");
     const singingVoice = await import(srcSingingVoice);
     const {
-      voiceClickEventListener, setBps, setMapping, setSelectedVoiceURI, setSetPattern, reset: resetSinging
+      voiceClickEventListener, setGetBps, setMapping, setSelectedVoiceURI, setSetPattern, reset: resetSinging
     } = singingVoice;
 
-    setBpm(bpm); // this one's from music.js. This must be before calls to getBps.
-
-    setBps(getBps());
+    setSetSelectedVoiceURI(setSelectedVoiceURI);
+    setGetBps(getBps);
     setMapping(voiceUriToNotePitchMapping);
     setSelectedVoiceURI(selectedVoiceURI);
     setSetPattern(setPattern);
