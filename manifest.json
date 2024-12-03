@@ -1,7 +1,7 @@
 {
   "name": "Hard Coral",
   "description": "An extension that generates music and sings the content of a page.",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "background": {
         "service_worker": "background.js"
     },
