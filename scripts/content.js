@@ -34,20 +34,33 @@ if ('speechSynthesis' in window) {
 
     const srcMusic = chrome.runtime.getURL("scripts/music.js");
     const music = await import(srcMusic);
-    const {musicClickEventListener, getBps, setBongoDrums, setPattern, reset: resetMusic } = music;
+    const {
+      musicClickEventListener, getBps, setBpm, setBongoDrums, setPattern, reset: resetMusic
+    } = music;
     addListener(document.body, 'click', musicClickEventListener, true);
     setBongoDrums(drums);
 
     const srcNoteMapper = chrome.runtime.getURL("scripts/note_mapper.js");
     const noteMapper = await import(srcNoteMapper);
-    const { voiceUriToNotePitchMapping } = noteMapper;
+    const { voiceOptions, voiceUriToNotePitchMapping } = noteMapper;
+
+    const srcVoiceSelector = chrome.runtime.getURL("scripts/selectors.js");
+    const voiceSelector = await import(srcVoiceSelector);
+    const { bpm, setVoiceOptions, selectedVoiceURI } = voiceSelector;
+
+    setVoiceOptions(voiceOptions);
 
     const srcSingingVoice = chrome.runtime.getURL("scripts/singing_voice.js");
     const singingVoice = await import(srcSingingVoice);
-    const {voiceClickEventListener, setBps, setMapping, setSetPattern, reset: resetSinging } = singingVoice;
+    const {
+      voiceClickEventListener, setBps, setMapping, setSelectedVoiceURI, setSetPattern, reset: resetSinging
+    } = singingVoice;
+
+    setBpm(bpm); // this one's from music.js. This must be before calls to getBps.
 
     setBps(getBps());
     setMapping(voiceUriToNotePitchMapping);
+    setSelectedVoiceURI(selectedVoiceURI);
     setSetPattern(setPattern);
 
     // listener that triggers playing text to speech on click event

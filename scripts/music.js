@@ -7,7 +7,11 @@ var setBongoDrums = (drums) => {
   bongo = drums;
 };
 
-var bpm = 60;
+var bpm;
+var setBpm = (newBpm) => {
+  bpm = newBpm;
+};
+
 var getBps = () => bpm / 60;
 
 var timeoutIds = [];
@@ -85,8 +89,8 @@ var musicClickEventListener = (e) => {
 
 export {
   musicClickEventListener,
-  bpm,
   getBps,
+  setBpm,
   setBongoDrums,
   setPattern,
   reset,
