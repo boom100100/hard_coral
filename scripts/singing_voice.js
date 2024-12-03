@@ -4,7 +4,7 @@ const setBps = (newBps) => {
 };
 
 let voiceUriToNotePitchMapping;
-const setMapper = (newVoiceUriToNotePitchMapping) => {
+const setMapping = (newVoiceUriToNotePitchMapping) => {
   voiceUriToNotePitchMapping = newVoiceUriToNotePitchMapping;
 };
 
@@ -155,7 +155,7 @@ const voiceClickEventListener = (e) => {
 export {
   voiceClickEventListener,
   setBps,
-  setMapper,
+  setMapping,
   setSetPattern,
   reset
 }

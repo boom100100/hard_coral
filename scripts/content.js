@@ -44,10 +44,10 @@ if ('speechSynthesis' in window) {
 
     const srcSingingVoice = chrome.runtime.getURL("scripts/singing_voice.js");
     const singingVoice = await import(srcSingingVoice);
-    const {voiceClickEventListener, setBps, setMapper, setSetPattern, reset: resetSinging } = singingVoice;
+    const {voiceClickEventListener, setBps, setMapping, setSetPattern, reset: resetSinging } = singingVoice;
 
     setBps(getBps());
-    setMapper(voiceUriToNotePitchMapping);
+    setMapping(voiceUriToNotePitchMapping);
     setSetPattern(setPattern);
 
     // listener that triggers playing text to speech on click event
