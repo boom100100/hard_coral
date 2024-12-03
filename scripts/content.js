@@ -48,7 +48,7 @@ if ('speechSynthesis' in window) {
     const srcVoiceSelector = chrome.runtime.getURL("scripts/selectors.js");
     const voiceSelector = await import(srcVoiceSelector);
     const {
-      setSetBpm, setSetSelectedVoiceURI, setVoiceOptions, selectedVoiceURI
+      setSetBpm, setSetSelectedVoiceURI, selectedVoiceURI, setVoiceOptions
     } = voiceSelector;
 
     setVoiceOptions(voiceOptions);
@@ -67,22 +67,22 @@ if ('speechSynthesis' in window) {
     setSetPattern(setPattern);
 
     // listener that triggers playing text to speech on click event
-    // const singListener = (e) => {
-    //   // Note: moving the settingsElements and shouldPlay constants
-    //   // outside of this function where they are used caused
-    //   // some indeterminate behavior. Reloading the extension
-    //   // sometimes resulted in the music failing to start. There
-    //   // was likely some race condition, perhaps causing the UI to
-    //   // load after getElementById was called.
-    //   const settingsElements = Array.from(
-    //     document.getElementById(
-    //       "96005210-8bc2-48ca-9b13-5818a7a9be20"
-    //     ).querySelectorAll("*")
-    //   );
-    //   const shouldPlay = currentElement => !settingsElements.includes(currentElement);
-    //   voiceClickEventListener(e, shouldPlay);
-    // };
-    addListener(document.body, "click", voiceClickEventListener, true);
+    const singListener = (e) => {
+      // Note: moving the settingsElements and shouldPlay constants
+      // outside of this function where they are used caused
+      // some indeterminate behavior. Reloading the extension
+      // sometimes resulted in the music failing to start. There
+      // was likely some race condition, perhaps causing the UI to
+      // load after getElementById was called.
+      const settingsElements = Array.from(
+        document.getElementById(
+          "96005210-8bc2-48ca-9b13-5818a7a9be20"
+        ).querySelectorAll("*")
+      );
+      const shouldPlay = currentElement => !settingsElements.includes(currentElement);
+      voiceClickEventListener(e, shouldPlay);
+    };
+    addListener(document.body, "click", singListener, true);
 
     // TODO: maybe one day polling won't be necessary https://stackoverflow.com/questions/3522090/event-when-window-location-href-changes
     // Must work for SPAs as well.
