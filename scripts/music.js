@@ -86,7 +86,7 @@ var musicClickEventListener = (e) => {
   // prevent overlapping beats
   reset();
 
-  // Note that `shouldPlay` is not set up here. Currently, there is no further 
+  // Note that `shouldExecute` is not set up here. Currently, there is no further 
   // functionality necessary because the beat is set based on the lyrical need
   // in `singing_voice.js`.
 };
