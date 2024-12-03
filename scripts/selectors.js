@@ -1,15 +1,15 @@
 let voiceOptions;
 const setVoiceOptions = (newVoiceOptions) => {
-    voiceOptions = newVoiceOptions;
+  voiceOptions = newVoiceOptions;
 };
 
-let selectedVoiceURI = voiceOptions?.[0] || "Good News";
+let selectedVoiceURI;
 let setSelectedVoiceURI;
 const setSetSelectedVoiceURI = (newSelectedVoiceURI) => {
   setSelectedVoiceURI = newSelectedVoiceURI;
 };
 const onChangeHandlerSelectVoice = (e) => {
-  selectedVoiceURI = e.target.value;
+  selectedVoiceURI = e.target.value;  
   setSelectedVoiceURI(selectedVoiceURI);
 };
 
@@ -61,6 +61,8 @@ const setupId = setInterval(() => {
 }, 10);
 
 const completeSetup = (voiceOptions) => {
+  selectedVoiceURI = voiceOptions[0];
+  setSelectedVoiceURI(selectedVoiceURI);
 
   const extensionDrawerVoiceSelectorOptions = voiceOptions.map(voiceURI => {
       const option = document.createElement("option");
