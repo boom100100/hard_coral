@@ -38,11 +38,16 @@ if ('speechSynthesis' in window) {
     addListener(document.body, 'click', musicClickEventListener, true);
     setBongoDrums(drums);
 
+    const srcNoteMapper = chrome.runtime.getURL("scripts/note_mapper.js");
+    const noteMapper = await import(srcNoteMapper);
+    const { voiceUriToNotePitchMapping } = noteMapper;
+
     const srcSingingVoice = chrome.runtime.getURL("scripts/singing_voice.js");
     const singingVoice = await import(srcSingingVoice);
-    const {voiceClickEventListener, setBps, setSetPattern, reset: resetSinging } = singingVoice;
+    const {voiceClickEventListener, setBps, setMapping, setSetPattern, reset: resetSinging } = singingVoice;
 
     setBps(getBps());
+    setMapping(voiceUriToNotePitchMapping);
     setSetPattern(setPattern);
 
     // listener that triggers playing text to speech on click event
