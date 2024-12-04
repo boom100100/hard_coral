@@ -19,6 +19,6 @@ Be sure to run this from the root of the project and update the version number f
 
 ## Learnings
 
-[Corals are animals](https://oceanservice.noaa.gov/facts/coral.html).
-There is a word that is [189,819 letters long](https://en.wikipedia.org/wiki/Longest_word_in_English).
-There are [over 20 definitions](https://www.merriam-webster.com/dictionary/pitch) for the word _pitch_.
+- [Corals are animals](https://oceanservice.noaa.gov/facts/coral.html).
+- There is a word that is [189,819 letters long](https://en.wikipedia.org/wiki/Longest_word_in_English).
+- There are [over 20 definitions](https://www.merriam-webster.com/dictionary/pitch) for the word _pitch_.
