@@ -46,14 +46,12 @@ var reset = () => {
 };
 
 const voiceClickEventListener = (e) => {
-  console.log("reached");
   // prevent overlapping voices
   reset();
 
   const currentElement = document.elementFromPoint(e.clientX, e.clientY);
 
   if (getShouldExecute && !getShouldExecute()(currentElement)) {
-    console.log("returning early");
     return;
   }
 
