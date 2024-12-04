@@ -13,7 +13,7 @@ Features:
 ## Package
 MacOs has weird compression issues when making .zip files, so use the following command for creating the .zip to upload to Google:
 
-    zip -r .chrome_extensions_assets/hard_coral0.0.v.zip *
+    zip -r .chrome_extensions_assets/hard_coral1.0.v.zip *
 
 Be sure to run this from the root of the project and update the version number for the output!
 
