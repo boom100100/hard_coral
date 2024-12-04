@@ -27,21 +27,34 @@ const onChangeHandlerSelectBpm = (e) => {
 
 const extensionDrawer = document.createElement("div");
 extensionDrawer.id = "96005210-8bc2-48ca-9b13-5818a7a9be20";
+extensionDrawer.style.margin = "20px";
+extensionDrawer.style.display = "flex";
+extensionDrawer.style.flexDirection = "row";
+extensionDrawer.style.justifyContent = "space-between";
+
 const extensionDrawerHideable = document.createElement("div");
+extensionDrawerHideable.style.display = "flex";
+extensionDrawerHideable.style.flexDirection = "column";
+extensionDrawerHideable.style.gap = "20px";
+extensionDrawerHideable.style.width = "500px";
 
 const extensionDrawerTitle = document.createElement("div");
-extensionDrawerTitle.innerText = "Hard Coral";
+extensionDrawerTitle.innerText = "Hard Coral\n\nPlease select a voice or speed.";
 
 const extensionDrawerHideShowToggleButton = document.createElement("button"); // hamburger
 extensionDrawerHideShowToggleButton.innerText = "Settings Toggle";
+extensionDrawerHideShowToggleButton.style.height = "30px";
+extensionDrawerHideShowToggleButton.style.right = "10px";
 extensionDrawerHideShowToggleButton.addEventListener("click", (_) => {
-  switch (extensionDrawerHideable.style.display) {
-    case "none":
-      extensionDrawerHideable.style.display = "block";
+  switch (extensionDrawerHideable.style.visibility) {
+    case "hidden":
+      extensionDrawerHideable.style.visibility = "";
+      extensionDrawerHideable.style.height = "auto";
       break;
-    case "block":
-    default:
-        extensionDrawerHideable.style.display = "none";
+      case "":
+        default:
+          extensionDrawerHideable.style.visibility = "hidden";
+          extensionDrawerHideable.style.height = "0px";
         break;
   }
 });
@@ -86,8 +99,6 @@ const completeSetup = (voiceOptions) => {
   extensionDrawerBpmSelector.min = bpmRange[0];
   extensionDrawerBpmSelector.max = bpmRange[1];
   
-  extensionDrawer.appendChild(extensionDrawerHideShowToggleButton);
-  
   for (let futureChild of [
     extensionDrawerTitle,
     extensionDrawerVoiceSelector,
@@ -99,6 +110,7 @@ const completeSetup = (voiceOptions) => {
   
   const body = document.body;
   extensionDrawer.appendChild(extensionDrawerHideable);
+  extensionDrawer.appendChild(extensionDrawerHideShowToggleButton);
   body.insertBefore(extensionDrawer, body.children[0]);
 };
 
