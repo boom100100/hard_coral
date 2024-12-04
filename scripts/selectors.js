@@ -70,8 +70,10 @@ extensionDrawerVoiceSelectorLabel.innerText = "Voice";
 extensionDrawerVoiceSelector.addEventListener("change", onChangeHandlerSelectVoice);
 extensionDrawerVoiceSelector.name = "voice-selector";
 extensionDrawerVoiceSelector.id = "voice-selector";
-extensionDrawerVoiceSelector.style.width = "300px";
+extensionDrawerVoiceSelector.style.border = "none";
+extensionDrawerVoiceSelector.style.borderBottom = "1px solid black";
 extensionDrawerVoiceSelector.style.display = "block";
+extensionDrawerVoiceSelector.style.width = "300px";
 extensionDrawerVoiceSelectorLabel.appendChild(extensionDrawerVoiceSelector);
 
 const setupId = setInterval(() => {
