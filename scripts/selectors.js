@@ -55,18 +55,20 @@ extensionDrawerTitle.innerText = "Hard Coral\n\nPlease select a voice or speed."
 const extensionDrawerHideShowToggleButton = document.createElement("button"); // hamburger
 extensionDrawerHideShowToggleButton.innerText = "Settings Toggle";
 extensionDrawerHideShowToggleButton.style.height = "30px";
-extensionDrawerHideShowToggleButton.style.right = "10px";
+extensionDrawerHideShowToggleButton.style.background = "white";
+extensionDrawerHideShowToggleButton.style.border = "none";
+extensionDrawerHideShowToggleButton.style.borderBottom = "1px solid black";
 extensionDrawerHideShowToggleButton.addEventListener("click", (_) => {
   switch (extensionDrawerHideable.style.visibility) {
     case "hidden":
       extensionDrawerHideable.style.visibility = "";
       extensionDrawerHideable.style.height = "auto";
       break;
-      case "":
-        default:
-          extensionDrawerHideable.style.visibility = "hidden";
-          extensionDrawerHideable.style.height = "0px";
-        break;
+    case "":
+    default:
+      extensionDrawerHideable.style.visibility = "hidden";
+      extensionDrawerHideable.style.height = "0px";
+      break;
   }
 });
 
