@@ -48,15 +48,15 @@ if ('speechSynthesis' in window) {
     const noteMapper = await import(srcNoteMapper);
     const { voiceOptions, voiceUriToNotePitchMapping } = noteMapper;
 
-    const srcVoiceSelector = chrome.runtime.getURL("scripts/selectors.js");
-    const voiceSelector = await import(srcVoiceSelector);
+    const srcSelector = chrome.runtime.getURL("scripts/selectors.js");
+    const selector = await import(srcSelector);
     const {
-      setSetBpm, setSetSelectedVoiceURI, selectedVoiceURI, setVoiceOptions
-    } = voiceSelector;
+      append: appendSettings, setSetBpm, setSetSelectedVoiceURI, selectedVoiceURI, setVoiceOptions
+    } = selector;
 
     setVoiceOptions(voiceOptions);
     setSetBpm(setBpm);
-
+    
     const srcSingingVoice = chrome.runtime.getURL("scripts/singing_voice.js");
     const singingVoice = await import(srcSingingVoice);
     const {
@@ -74,7 +74,8 @@ if ('speechSynthesis' in window) {
     setMapping(voiceUriToNotePitchMapping);
     setSelectedVoiceURI(selectedVoiceURI);
     setSetPattern(setPattern);
-
+    appendSettings();
+  
     const getShouldExecute = () => {
       const settingsElements = Array.from(
         document.getElementById(
