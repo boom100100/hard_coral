@@ -82,7 +82,8 @@ if ('speechSynthesis' in window) {
         ).querySelectorAll("*")
       );
       const shouldExecute = currentElement => !(
-        settingsElements === currentElement 
+        document.body === currentElement
+        || settingsElements[0].parentElement === currentElement 
         || settingsElements.includes(currentElement)
       );
       return shouldExecute;
