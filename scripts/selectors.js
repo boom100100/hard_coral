@@ -22,12 +22,18 @@ const setSetBpm = (newSetBpm) => {
 };
 
 let extensionDrawerBpmSelector;
+let extensionDrawerBpmSelectorText;
 let extensionDrawerBpmSelectorLabel;
+let extensionDrawerBpmSelectorLabelDivInner;
+const bpmInnerText = "Beats Per Minute (BPM)";
 const onChangeHandlerSelectBpm = (e) => {
   bpm = e.target.value;
   setBpm(bpm);
-  extensionDrawerBpmSelectorLabel.innerText = `BPM: ${bpm}`;
-  extensionDrawerBpmSelectorLabel.appendChild(extensionDrawerBpmSelector);
+  extensionDrawerBpmSelector.value = bpm;
+  extensionDrawerBpmSelectorText.value = bpm;
+  extensionDrawerBpmSelectorLabelDivInner.appendChild(extensionDrawerBpmSelector);
+  extensionDrawerBpmSelectorLabelDivInner.appendChild(extensionDrawerBpmSelectorText);
+  extensionDrawerBpmSelectorLabel.appendChild(extensionDrawerBpmSelectorLabelDivInner);
 };
 
 const extensionDrawer = document.createElement("div");
@@ -99,18 +105,31 @@ const completeSetup = (voiceOptions) => {
   }
   
   extensionDrawerBpmSelector = document.createElement("input");
+  extensionDrawerBpmSelectorText = document.createElement("input");
   extensionDrawerBpmSelectorLabel = document.createElement("label");
-  extensionDrawerBpmSelectorLabel.innerText = `BPM: ${bpm}`;
+  extensionDrawerBpmSelectorLabel.innerText = bpmInnerText;
+  extensionDrawerBpmSelectorLabelDivInner = document.createElement("div");
+  extensionDrawerBpmSelectorLabelDivInner.style.display = "flex";
+  extensionDrawerBpmSelectorLabelDivInner.style.justifyContent = "space-between";
+  extensionDrawerBpmSelectorLabelDivInner.style.width = "300px";
   extensionDrawerBpmSelector.addEventListener("change", onChangeHandlerSelectBpm);
+  extensionDrawerBpmSelectorText.addEventListener("change", onChangeHandlerSelectBpm);
   extensionDrawerBpmSelector.style.display = "block";
-  extensionDrawerBpmSelector.style.width = "300px";
+  extensionDrawerBpmSelector.style.width = "200px";
+  extensionDrawerBpmSelectorText.style.width = "75px";
   extensionDrawerBpmSelector.type = "range";
+  extensionDrawerBpmSelectorText.type = "text";
   extensionDrawerBpmSelector.id = "bpm";
   extensionDrawerBpmSelector.name = "bpm";
+  extensionDrawerBpmSelectorText.id = "bpm-text";
+  extensionDrawerBpmSelectorText.name = "bpm-text";
   extensionDrawerBpmSelector.value = bpm;
+  extensionDrawerBpmSelectorText.value = bpm;
   extensionDrawerBpmSelector.min = bpmRange[0];
   extensionDrawerBpmSelector.max = bpmRange[1];
-  extensionDrawerBpmSelectorLabel.appendChild(extensionDrawerBpmSelector);
+  extensionDrawerBpmSelectorLabelDivInner.appendChild(extensionDrawerBpmSelector);
+  extensionDrawerBpmSelectorLabelDivInner.appendChild(extensionDrawerBpmSelectorText);
+  extensionDrawerBpmSelectorLabel.appendChild(extensionDrawerBpmSelectorLabelDivInner);
   
   for (let futureChild of [
     extensionDrawerTitle,
@@ -124,13 +143,22 @@ const completeSetup = (voiceOptions) => {
   const body = document.body;
   extensionDrawer.appendChild(extensionDrawerHideable);
   extensionDrawer.appendChild(extensionDrawerHideShowToggleButton);
+};
+
+const append = () => {
+  const body = document.body;
   body.insertBefore(extensionDrawer, body.children[0]);
 };
 
+const remove = () => {
+  document.body.removeChild(extensionDrawer);
+};
 
 export {
-    selectedVoiceURI,
-    setSetBpm,
-    setSetSelectedVoiceURI,
-    setVoiceOptions,
+  append,
+  remove,
+  selectedVoiceURI,
+  setSetBpm,
+  setSetSelectedVoiceURI,
+  setVoiceOptions,
 }
