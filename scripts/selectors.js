@@ -20,9 +20,14 @@ const setSetBpm = (newSetBpm) => {
   setBpm = newSetBpm;
   setBpm(bpm);
 };
+
+let extensionDrawerBpmSelector;
+let extensionDrawerBpmSelectorLabel;
 const onChangeHandlerSelectBpm = (e) => {
   bpm = e.target.value;
   setBpm(bpm);
+  extensionDrawerBpmSelectorLabel.innerText = `BPM: ${bpm}`;
+  extensionDrawerBpmSelectorLabel.appendChild(extensionDrawerBpmSelector);
 };
 
 const extensionDrawer = document.createElement("div");
@@ -60,11 +65,14 @@ extensionDrawerHideShowToggleButton.addEventListener("click", (_) => {
 });
 
 const extensionDrawerVoiceSelector = document.createElement("select");
+const extensionDrawerVoiceSelectorLabel = document.createElement("label");
+extensionDrawerVoiceSelectorLabel.innerText = "Voice";
 extensionDrawerVoiceSelector.addEventListener("change", onChangeHandlerSelectVoice);
 extensionDrawerVoiceSelector.name = "voice-selector";
 extensionDrawerVoiceSelector.id = "voice-selector";
 extensionDrawerVoiceSelector.style.width = "300px";
 extensionDrawerVoiceSelector.style.display = "block";
+extensionDrawerVoiceSelectorLabel.appendChild(extensionDrawerVoiceSelector);
 
 const setupId = setInterval(() => {
   if (voiceOptions.length !== 0) {
@@ -88,7 +96,9 @@ const completeSetup = (voiceOptions) => {
       extensionDrawerVoiceSelector.appendChild(option);
   }
   
-  const extensionDrawerBpmSelector = document.createElement("input");
+  extensionDrawerBpmSelector = document.createElement("input");
+  extensionDrawerBpmSelectorLabel = document.createElement("label");
+  extensionDrawerBpmSelectorLabel.innerText = `BPM: ${bpm}`;
   extensionDrawerBpmSelector.addEventListener("change", onChangeHandlerSelectBpm);
   extensionDrawerBpmSelector.style.display = "block";
   extensionDrawerBpmSelector.style.width = "300px";
@@ -98,11 +108,12 @@ const completeSetup = (voiceOptions) => {
   extensionDrawerBpmSelector.value = bpm;
   extensionDrawerBpmSelector.min = bpmRange[0];
   extensionDrawerBpmSelector.max = bpmRange[1];
+  extensionDrawerBpmSelectorLabel.appendChild(extensionDrawerBpmSelector);
   
   for (let futureChild of [
     extensionDrawerTitle,
-    extensionDrawerVoiceSelector,
-    extensionDrawerBpmSelector,
+    extensionDrawerVoiceSelectorLabel,
+    extensionDrawerBpmSelectorLabel,
   ]) {
       extensionDrawerHideable.appendChild(futureChild);
       
@@ -120,5 +131,4 @@ export {
     setSetBpm,
     setSetSelectedVoiceURI,
     setVoiceOptions,
-    extensionDrawer,
 }
