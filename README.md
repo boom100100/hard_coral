@@ -9,6 +9,7 @@ Features:
 - double-click to interact with a link or button
 - toggle the extension on and off by clicking the extension button
 - user controls for speed and voice
+- Language support: English, Chinese, Spanish
 
 ## Package
 MacOs has weird compression issues when making .zip files, so use the following command for creating the .zip to upload to Google:
