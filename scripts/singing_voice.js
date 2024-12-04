@@ -1,3 +1,8 @@
+let getShouldExecute;
+let setGetShouldExecute = (newGetShouldExecute) => {
+  getShouldExecute = newGetShouldExecute;
+};
+
 let getBps;
 const setGetBps = (newGetBps) => {
   getBps = newGetBps;
@@ -40,14 +45,14 @@ var reset = () => {
   }
 };
 
-const voiceClickEventListener = (e, shouldPlay) => {
+const voiceClickEventListener = (e) => {
   console.log("reached");
   // prevent overlapping voices
   reset();
 
   const currentElement = document.elementFromPoint(e.clientX, e.clientY);
 
-  if (shouldPlay && !shouldPlay(currentElement)) {
+  if (getShouldExecute && !getShouldExecute()(currentElement)) {
     console.log("returning early");
     return;
   }
@@ -168,5 +173,6 @@ export {
   setMapping,
   setSelectedVoiceURI,
   setSetPattern,
+  setGetShouldExecute,
   reset
 }

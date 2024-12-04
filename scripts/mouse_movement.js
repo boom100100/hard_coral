@@ -1,5 +1,9 @@
 const previousElementProps = {};
 let currentElement = undefined;
+let getShouldExecute;
+let setGetShouldExecute = (newGetShouldExecute) => {
+  getShouldExecute = newGetShouldExecute;
+};
 
 const mouseMoveEventListener = (e) => {
   const {
@@ -11,7 +15,7 @@ const mouseMoveEventListener = (e) => {
   currentElement = document.elementFromPoint(e.clientX, e.clientY);
   if (
     previousElement === currentElement
-    || currentElement.id === "96005210-8bc2-48ca-9b13-5818a7a9be20" // id for settings UI
+    || (getShouldExecute && !getShouldExecute()(currentElement))
   ) {
     return;
   }
@@ -35,6 +39,12 @@ const mouseLeaveEventListener = (e) => {
     previousElementColor,
   } = previousElementProps;
   
+  if (
+    getShouldExecute && !getShouldExecute()(currentElement)
+  ) {
+    return;
+  }
+
   currentElement.style.background = previousElementOriginalBackground;
   currentElement.style.color = previousElementColor;
 }
@@ -42,4 +52,5 @@ const mouseLeaveEventListener = (e) => {
 export {
   mouseMoveEventListener,
   mouseLeaveEventListener,
+  setGetShouldExecute,
 }

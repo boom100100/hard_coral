@@ -10,14 +10,17 @@ if ('speechSynthesis' in window) {
   (async () => {
     const srcToggleInteraction = chrome.runtime.getURL("scripts/toggle_interaction.js");
     const toggleInteraction = await import(srcToggleInteraction);
-    // const toggleLinks = await import(srcToggleLinks);
     const { disableInteraction } = toggleInteraction;
 
     disableInteraction();
 
     const srcMouseMovement = chrome.runtime.getURL("scripts/mouse_movement.js");
     const mouseMovement = await import(srcMouseMovement);
-    const { mouseMoveEventListener, mouseLeaveEventListener } = mouseMovement;
+    const {
+      mouseMoveEventListener,
+      mouseLeaveEventListener,
+      setGetShouldExecute: setGetShouldExecuteMouse
+    } = mouseMovement;
 
     // listener that styles hovered element and saves its text
     addListener(document, 'mousemove', mouseMoveEventListener);
@@ -57,7 +60,13 @@ if ('speechSynthesis' in window) {
     const srcSingingVoice = chrome.runtime.getURL("scripts/singing_voice.js");
     const singingVoice = await import(srcSingingVoice);
     const {
-      voiceClickEventListener, setGetBps, setMapping, setSelectedVoiceURI, setSetPattern, reset: resetSinging
+      voiceClickEventListener,
+      setGetBps,
+      setMapping,
+      setSelectedVoiceURI,
+      setSetPattern,
+      setGetShouldExecute: setGetShouldExecuteSinging,
+      reset: resetSinging
     } = singingVoice;
 
     setSetSelectedVoiceURI(setSelectedVoiceURI);
@@ -66,23 +75,24 @@ if ('speechSynthesis' in window) {
     setSelectedVoiceURI(selectedVoiceURI);
     setSetPattern(setPattern);
 
-    // listener that triggers playing text to speech on click event
-    const singListener = (e) => {
-      // Note: moving the settingsElements and shouldPlay constants
-      // outside of this function where they are used caused
-      // some indeterminate behavior. Reloading the extension
-      // sometimes resulted in the music failing to start. There
-      // was likely some race condition, perhaps causing the UI to
-      // load after getElementById was called.
+    const getShouldExecute = () => {
       const settingsElements = Array.from(
         document.getElementById(
           "96005210-8bc2-48ca-9b13-5818a7a9be20"
         ).querySelectorAll("*")
       );
-      const shouldPlay = currentElement => !settingsElements.includes(currentElement);
-      voiceClickEventListener(e, shouldPlay);
-    };
-    addListener(document.body, "click", singListener, true);
+      const shouldExecute = currentElement => !(
+        settingsElements === currentElement 
+        || settingsElements.includes(currentElement)
+      );
+      return shouldExecute;
+    }
+
+    setGetShouldExecuteMouse(getShouldExecute);
+    setGetShouldExecuteSinging(getShouldExecute);
+    
+    // listener that triggers playing text to speech on click event
+    addListener(document.body, "click", voiceClickEventListener, true);
 
     // TODO: maybe one day polling won't be necessary https://stackoverflow.com/questions/3522090/event-when-window-location-href-changes
     // Must work for SPAs as well.
