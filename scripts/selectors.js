@@ -56,6 +56,7 @@ const extensionDrawerHideShowToggleButton = document.createElement("button"); //
 extensionDrawerHideShowToggleButton.innerText = "Settings Toggle";
 extensionDrawerHideShowToggleButton.style.height = "30px";
 extensionDrawerHideShowToggleButton.style.background = "white";
+extensionDrawerHideShowToggleButton.style.color = "black";
 extensionDrawerHideShowToggleButton.style.border = "none";
 extensionDrawerHideShowToggleButton.style.borderBottom = "1px solid black";
 extensionDrawerHideShowToggleButton.addEventListener("click", (_) => {
@@ -77,6 +78,8 @@ const extensionDrawerVoiceSelectorLabel = document.createElement("label");
 extensionDrawerVoiceSelectorLabel.innerText = "Voice";
 extensionDrawerVoiceSelector.addEventListener("change", onChangeHandlerSelectVoice);
 extensionDrawerVoiceSelector.name = "voice-selector";
+extensionDrawerVoiceSelector.style.background = "white";
+extensionDrawerVoiceSelector.style.color = "black";
 extensionDrawerVoiceSelector.id = "voice-selector";
 extensionDrawerVoiceSelector.style.border = "none";
 extensionDrawerVoiceSelector.style.borderBottom = "1px solid black";
