@@ -7,8 +7,12 @@ var setBongoDrums = (drums) => {
   bongo = drums;
 };
 
-var bpm = 60;
-var getBps = () => bpm / 60;
+var bpm;
+var setBpm = (newBpm) => {
+  bpm = newBpm;
+};
+
+var getBps = () => bpm === undefined ? undefined : bpm / 60;
 
 var timeoutIds = [];
 var constructPlayback = (drumHead) => {
@@ -81,12 +85,16 @@ var reset = () => {
 var musicClickEventListener = (e) => {
   // prevent overlapping beats
   reset();
+
+  // Note that `shouldExecute` is not set up here. Currently, there is no further 
+  // functionality necessary because the beat is set based on the lyrical need
+  // in `singing_voice.js`.
 };
 
 export {
   musicClickEventListener,
-  bpm,
   getBps,
+  setBpm,
   setBongoDrums,
   setPattern,
   reset,

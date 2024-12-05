@@ -1,5 +1,9 @@
 const previousElementProps = {};
 let currentElement = undefined;
+let getShouldExecute;
+let setGetShouldExecute = (newGetShouldExecute) => {
+  getShouldExecute = newGetShouldExecute;
+};
 
 const mouseMoveEventListener = (e) => {
   const {
@@ -9,7 +13,10 @@ const mouseMoveEventListener = (e) => {
   } = previousElementProps;
   // saves element with target text
   currentElement = document.elementFromPoint(e.clientX, e.clientY);
-  if (previousElement === currentElement) {
+  if (
+    previousElement === currentElement
+    || (getShouldExecute && !getShouldExecute()(currentElement))
+  ) {
     return;
   }
 
@@ -32,6 +39,12 @@ const mouseLeaveEventListener = (e) => {
     previousElementColor,
   } = previousElementProps;
   
+  if (
+    getShouldExecute && !getShouldExecute()(currentElement)
+  ) {
+    return;
+  }
+
   currentElement.style.background = previousElementOriginalBackground;
   currentElement.style.color = previousElementColor;
 }
@@ -39,4 +52,5 @@ const mouseLeaveEventListener = (e) => {
 export {
   mouseMoveEventListener,
   mouseLeaveEventListener,
+  setGetShouldExecute,
 }

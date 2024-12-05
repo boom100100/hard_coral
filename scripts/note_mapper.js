@@ -1,3 +1,5 @@
+// TODO: when adding other pitched voices, cross-reference which notes are common between all voices.
+// Then, make the singing implementation only use those common notes.
 const goodNewsNoteToPitchMapping = {
   // Anything lower than .5 comes back as "B2"
   "B2": .5,
@@ -37,11 +39,14 @@ const goodNewsNoteToPitchMapping = {
   "B4": 2,
 };
 
+const whisperNoteToPitchMapping = {};
+
 const goodNewsURI = "Good News";
+const whisperURI = "Whisper";
 
 const voiceUriToNotePitchMapping = {
-
   [goodNewsURI]: goodNewsNoteToPitchMapping,
+  [whisperURI]: whisperNoteToPitchMapping,
   // TODO: more voices
   // "Bad News": null,
   // "Cellos": null,
@@ -53,10 +58,12 @@ const voiceUriToNotePitchMapping = {
     // "Shelly (English (United States))",
 };
 
-// const voiceOptions = [
-//   goodNewsName,
-// ];
+const voiceOptions = [
+  whisperURI,
+  goodNewsURI,
+];
 
 export {
+  voiceOptions,
   voiceUriToNotePitchMapping,
 }

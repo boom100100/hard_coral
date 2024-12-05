@@ -1,11 +1,21 @@
-let bps;
-const setBps = (newBps) => {
-  bps = newBps;
+let getShouldExecute;
+let setGetShouldExecute = (newGetShouldExecute) => {
+  getShouldExecute = newGetShouldExecute;
+};
+
+let getBps;
+const setGetBps = (newGetBps) => {
+  getBps = newGetBps;
 };
 
 let voiceUriToNotePitchMapping;
 const setMapping = (newVoiceUriToNotePitchMapping) => {
   voiceUriToNotePitchMapping = newVoiceUriToNotePitchMapping;
+};
+
+let selectedVoiceURI;
+const setSelectedVoiceURI = (newSelectedVoice) => {
+  selectedVoiceURI = newSelectedVoice;
 };
 
 let setPattern;
@@ -34,18 +44,23 @@ var reset = () => {
     window.speechSynthesis.cancel();
   }
 };
+
 const voiceClickEventListener = (e) => {
   // prevent overlapping voices
   reset();
 
   const currentElement = document.elementFromPoint(e.clientX, e.clientY);
-  const allContent = currentElement.innerText;
 
+  if (getShouldExecute && !getShouldExecute()(currentElement)) {
+    return;
+  }
+
+  const bps = getBps();
   const cleanContent = (content) => {
     return content;
   }
 
-  const cleanedContent = cleanContent(allContent);
+  const cleanedContent = cleanContent(currentElement.innerText);
 
   // TODO: move fcn declaration to root of file
   const beatToTimeInMilliseconds = (startingBeat, bps) => {
@@ -73,6 +88,7 @@ const voiceClickEventListener = (e) => {
   };
 
   const setupId = setInterval(() => {
+    // This interval is required to wait for the async function `getVoices` to resolve
     const voices = window.speechSynthesis.getVoices();
     if (voices.length !== 0) {
         clearInterval(setupId);
@@ -109,22 +125,19 @@ const voiceClickEventListener = (e) => {
     );
     setPatternIds.push(setPatternId);
 
-    // TODO: let user select this
-    const voiceURI = "Good News";
-    const notePitchMapping = voiceUriToNotePitchMapping[voiceURI];
-    const voice = voicesByUri[voiceURI];
-    // const voice = voicesByUri["Rocko (English (United States))"];
+    const notePitchMapping = voiceUriToNotePitchMapping[selectedVoiceURI];
+    const getPitch = (note) => notePitchMapping[note] ?? 1;
+    const voice = voicesByUri[selectedVoiceURI];
 
-    const whenToSpeakBeats = [0,1,1,1];
-    // test: hot cross buns (but long words will throw off the rhythm)
+    const whenToSpeakBeats = [0];
     const pitches = [
-      notePitchMapping["C3"], notePitchMapping["D3"], notePitchMapping["E3"], notePitchMapping["F3"], 
-      notePitchMapping["G3"], notePitchMapping["A3"], notePitchMapping["B3"], notePitchMapping["C4"], 
+      getPitch("C3"), getPitch("D3"), getPitch("E3"), getPitch("F3"), 
+      getPitch("G3"), getPitch("A3"), getPitch("B3"), getPitch("C4"), 
     ];
     const rates = [1];
     // TODO: is pitch variable during pause? No.
     // is rate variable?
-    
+
     for (let word of words) {
       const msg = new SpeechSynthesisUtterance(word);
       msg.addEventListener("end", (_) => spokenWordsCount++);
@@ -154,8 +167,10 @@ const voiceClickEventListener = (e) => {
 
 export {
   voiceClickEventListener,
-  setBps,
+  setGetBps,
   setMapping,
+  setSelectedVoiceURI,
   setSetPattern,
+  setGetShouldExecute,
   reset
 }
