@@ -40,35 +40,46 @@ const extensionDrawer = document.createElement("div");
 extensionDrawer.id = "96005210-8bc2-48ca-9b13-5818a7a9be20";
 extensionDrawer.style.margin = "20px";
 extensionDrawer.style.display = "flex";
-extensionDrawer.style.flexDirection = "row";
+extensionDrawer.style.flexFlow = "row wrap";
 extensionDrawer.style.justifyContent = "space-between";
 
-const extensionDrawerHideable = document.createElement("div");
-extensionDrawerHideable.style.display = "flex";
-extensionDrawerHideable.style.flexDirection = "column";
-extensionDrawerHideable.style.gap = "20px";
-extensionDrawerHideable.style.width = "500px";
+const extensionDrawerHideableSettings = document.createElement("div");
+const extensionDrawerHideableInstructions = document.createElement("div");
+extensionDrawerHideableSettings.style.display = "flex";
+extensionDrawerHideableSettings.style.flexDirection = "column";
+extensionDrawerHideableSettings.style.gap = "20px";
+extensionDrawerHideableSettings.style.minWidth = "300px";
+extensionDrawerHideableSettings.style.maxWidth = "300px";
 
 const extensionDrawerTitle = document.createElement("div");
-extensionDrawerTitle.innerText = "Hard Coral\n\nPlease select a voice or speed.";
+extensionDrawerTitle.innerText = "Hard Coral\n\n\nSettings\n";
+extensionDrawerHideableInstructions.innerText = "Instructions\n\nPoint and click at the text you would like to hear.\n\nDouble-click a link or button to trigger it.\n\nDeactivate the extension by clicking the extension icon to reset single-click action on links and buttons.";
+extensionDrawerHideableInstructions.style.minWidth = "300px";
+extensionDrawerHideableInstructions.style.maxWidth = "300px";
 
 const extensionDrawerHideShowToggleButton = document.createElement("button"); // hamburger
 extensionDrawerHideShowToggleButton.innerText = "Settings Toggle";
 extensionDrawerHideShowToggleButton.style.height = "30px";
+extensionDrawerHideShowToggleButton.style.minWidth = "120px";
+extensionDrawerHideShowToggleButton.style.maxWidth = "120px";
 extensionDrawerHideShowToggleButton.style.background = "white";
 extensionDrawerHideShowToggleButton.style.color = "black";
 extensionDrawerHideShowToggleButton.style.border = "none";
 extensionDrawerHideShowToggleButton.style.borderBottom = "1px solid black";
 extensionDrawerHideShowToggleButton.addEventListener("click", (_) => {
-  switch (extensionDrawerHideable.style.visibility) {
+  switch (extensionDrawerHideableSettings.style.visibility) {
     case "hidden":
-      extensionDrawerHideable.style.visibility = "";
-      extensionDrawerHideable.style.height = "auto";
+      extensionDrawerHideableInstructions.style.visibility = "";
+      extensionDrawerHideableInstructions.style.height = "auto";
+      extensionDrawerHideableSettings.style.visibility = "";
+      extensionDrawerHideableSettings.style.height = "auto";
       break;
     case "":
     default:
-      extensionDrawerHideable.style.visibility = "hidden";
-      extensionDrawerHideable.style.height = "0px";
+      extensionDrawerHideableInstructions.style.visibility = "hidden";
+      extensionDrawerHideableInstructions.style.height = "0px";
+      extensionDrawerHideableSettings.style.visibility = "hidden";
+      extensionDrawerHideableSettings.style.height = "0px";
       break;
   }
 });
@@ -141,12 +152,13 @@ const completeSetup = (voiceOptions) => {
     extensionDrawerVoiceSelectorLabel,
     extensionDrawerBpmSelectorLabel,
   ]) {
-      extensionDrawerHideable.appendChild(futureChild);
+      extensionDrawerHideableSettings.appendChild(futureChild);
       
   }
   
   const body = document.body;
-  extensionDrawer.appendChild(extensionDrawerHideable);
+  extensionDrawer.appendChild(extensionDrawerHideableSettings);
+  extensionDrawer.appendChild(extensionDrawerHideableInstructions);
   extensionDrawer.appendChild(extensionDrawerHideShowToggleButton);
 };
 
