@@ -96,21 +96,10 @@ if ('speechSynthesis' in window) {
     // listener that triggers playing text to speech on click event
     addListener(document.body, "click", voiceClickEventListener, true);
 
-    // TODO: maybe one day polling won't be necessary https://stackoverflow.com/questions/3522090/event-when-window-location-href-changes
-    // Must work for SPAs as well.
-    var oldHref = window.location.href;
-    const id = setInterval(
-      () => {
-        if (oldHref === window.location.href) {
-          return;
-        }
-
-        resetMusic();
-        resetSinging();
-        clearInterval(id);
-      },
-      200
-    );
+    const srcTerminator = chrome.runtime.getURL("scripts/terminator.js");
+    const terminator = await import(srcTerminator);
+    const { setLocationChangeMonitor } = terminator;
+    setLocationChangeMonitor();
   })();
 
  } else {
