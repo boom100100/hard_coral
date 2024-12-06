@@ -41,10 +41,6 @@ const terminate = async () => {
           return;
         }
 
-        const srcTerminator = chrome.runtime.getURL("scripts/terminator.js");
-        const terminator = await import(srcTerminator);
-        const { terminate } = terminator;
-
         terminate();
         clearInterval(id);
       },
