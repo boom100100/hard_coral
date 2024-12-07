@@ -8,8 +8,7 @@ let setGetShouldExecute = (newGetShouldExecute) => {
 const mouseMoveEventListener = (e) => {
   const {
     previousElement,
-    previousElementOriginalBackground,
-    previousElementColor,
+    previousElementOriginalStyle,
   } = previousElementProps;
   // saves element with target text
   currentElement = document.elementFromPoint(e.clientX, e.clientY);
@@ -22,21 +21,17 @@ const mouseMoveEventListener = (e) => {
 
   // styling
   const prevOrCurrentElement = (previousElement ?? currentElement);
-  const prevOrCurrentColor = (previousElementColor ?? currentElement.style.color);
-  const prevOrCurrentBackground = (previousElementOriginalBackground ?? currentElement.style.background);
-  (prevOrCurrentElement).style.background = prevOrCurrentBackground;
-  (prevOrCurrentElement).style.color = prevOrCurrentColor;
+  const prevOrCurrentStyle = (previousElementOriginalStyle ?? currentElement.style);
+  (prevOrCurrentElement).style = prevOrCurrentStyle;
   previousElementProps.previousElement = currentElement;
-  previousElementProps.previousElementOriginalBackground = currentElement.style.background;
-  previousElementProps.previousElementColor = currentElement.style.color;
+  previousElementProps.previousElementOriginalStyle = currentElement.style;
   currentElement.style.background = "#000000";
   currentElement.style.color = "#eeeeee";
 }
 
 const mouseLeaveEventListener = (e) => {
   const {
-    previousElementOriginalBackground,
-    previousElementColor,
+    previousElementOriginalStyle,
   } = previousElementProps;
   
   if (
@@ -45,8 +40,8 @@ const mouseLeaveEventListener = (e) => {
     return;
   }
 
-  currentElement.style.background = previousElementOriginalBackground;
-  currentElement.style.color = previousElementColor;
+  delete currentElement.style;
+  currentElement.style = previousElementOriginalStyle;
 }
 
 export {
