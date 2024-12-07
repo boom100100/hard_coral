@@ -26,6 +26,7 @@ const mouseMoveEventListener = (e) => {
   ) {
     return;
   }
+
   // styling
   console.log(i, "mouseMoveEventListener begin", currentElement.style.background, currentElement.style.color);
   const prevOrCurrentElement = (previousElement ?? currentElement);
@@ -40,6 +41,7 @@ const mouseMoveEventListener = (e) => {
   currentElement.style.color = "#eeeeee";
   console.log(i, "mouseMoveEventListener end", currentElement.style.background, currentElement.style.color);
   i++;
+
 }
 
 const mouseLeaveEventListener = (e) => {
@@ -61,6 +63,7 @@ const mouseLeaveEventListener = (e) => {
 
   console.log(i, "mouseLeaveEventListener end", currentElement.style.background, currentElement.style.color);
   i++;
+
 }
 
 export {
