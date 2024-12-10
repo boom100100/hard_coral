@@ -1,7 +1,6 @@
 const previousElementProps = {
   previousElement: undefined,
   previousStyleCssText: undefined,
-  previousStyle: undefined,
 };
 
 let currentElement;
@@ -14,7 +13,6 @@ const mouseMoveEventListener = (e) => {
   const {
     previousElement,
     previousStyleCssText,
-    previousStyle,
   } = previousElementProps;
   // saves element with target text
   currentElement = document.elementFromPoint(e.clientX, e.clientY);
@@ -27,17 +25,16 @@ const mouseMoveEventListener = (e) => {
 
   // styling
   const prevOrCurrentElement = (previousElement ?? currentElement);
-  const prevOrCurrentStyle = (previousStyle ?? currentElement.style);
-  // const prevOrCurrentStyleCssText = (previousStyleCssText ?? currentElement.style.cssText);
+  // style.cssText reverts more smoothly than style, for some reason.
+  // style is probably just not writeable.
+  const prevOrCurrentStyleCssText = (previousStyleCssText ?? currentElement.style.cssText);
 
   // set previous element back how it was
-  prevOrCurrentElement.style = prevOrCurrentStyle;
-  // prevOrCurrentElement.style.cssText = prevOrCurrentStyleCssText;
+  prevOrCurrentElement.style.cssText = prevOrCurrentStyleCssText;
 
   // looking forward: currentElement (before its change) is the future previousElement
   previousElementProps.previousElement = currentElement;
-  previousElementProps.previousStyle = currentElement.style;
-  // previousElementProps.previousStyleCssText = currentElement.style.cssText;
+  previousElementProps.previousStyleCssText = currentElement.style.cssText;
   
   // highlight currentElement
   currentElement.style.background = "#000000";
@@ -45,7 +42,7 @@ const mouseMoveEventListener = (e) => {
 }
 
 const mouseLeaveEventListener = (e) => {
-  const { previousStyleCssText, previousStyle } = previousElementProps;
+  const { previousStyleCssText } = previousElementProps;
   
   if (
     getShouldExecute && getShouldExecute()(currentElement)
@@ -53,8 +50,7 @@ const mouseLeaveEventListener = (e) => {
     return;
   }
 
-  currentElement.style = previousStyle;
-  // currentElement.style.cssText = previousStyleCssText;
+  currentElement.style.cssText = previousStyleCssText;
 }
 
 export {
