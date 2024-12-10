@@ -23,8 +23,8 @@ const terminate = async () => {
 
     document.removeEventListener('mousemove', mouseMoveEventListener);
     document.removeEventListener('mouseleave', mouseLeaveEventListener);
-    document.body.removeEventListener('click', musicClickEventListener, true);
-    document.body.removeEventListener('click', voiceClickEventListener, true);
+    document.documentElement.removeEventListener('click', musicClickEventListener, true);
+    document.documentElement.removeEventListener('click', voiceClickEventListener, true);
     
     resetMusic();
     resetSinging();

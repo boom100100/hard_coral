@@ -40,7 +40,7 @@ if ('speechSynthesis' in window) {
       musicClickEventListener, getBps, setBpm, setBongoDrums, setPattern, reset: resetMusic
     } = music;
     // listener that resets beat on click event
-    addListener(document.body, "click", musicClickEventListener, true);
+    addListener(document.documentElement, "click", musicClickEventListener, true);
     setBongoDrums(drums);
 
     const srcNoteMapper = chrome.runtime.getURL("scripts/note_mapper.js");
@@ -74,7 +74,7 @@ if ('speechSynthesis' in window) {
     appendSettings();
     
     // listener that triggers playing text to speech on click event
-    addListener(document.body, "click", voiceClickEventListener, true);
+    addListener(document.documentElement, "click", voiceClickEventListener, true);
 
     const srcTerminator = chrome.runtime.getURL("scripts/terminator.js");
     const terminator = await import(srcTerminator);
