@@ -26,11 +26,15 @@ const mouseMoveEventListener = (e) => {
   // styling
   const prevOrCurrentElement = (previousElement ?? currentElement);
   const prevOrCurrentStyleCssText = (previousStyleCssText ?? currentElement.style.cssText);
+
+  // set previous element back how it was
   prevOrCurrentElement.style.cssText = prevOrCurrentStyleCssText;
 
+  // looking forward: currentElement (before its change) is the future previousElement
   previousElementProps.previousElement = currentElement;
   previousElementProps.previousStyleCssText = currentElement.style.cssText;
-
+  
+  // highlight currentElement
   currentElement.style.background = "#000000";
   currentElement.style.color = "#eeeeee";
 }
