@@ -154,8 +154,7 @@ const completeSetup = (voiceOptions) => {
       extensionDrawerHideableSettings.appendChild(futureChild);
       
   }
-  
-  const body = document.body;
+
   extensionDrawer.appendChild(extensionDrawerHideableSettings);
   extensionDrawer.appendChild(extensionDrawerHideableInstructions);
   extensionDrawer.appendChild(extensionDrawerHideShowToggleButton);
