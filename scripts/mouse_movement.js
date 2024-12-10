@@ -42,15 +42,17 @@ const mouseMoveEventListener = (e) => {
 }
 
 const mouseLeaveEventListener = (e) => {
-  const { previousStyleCssText } = previousElementProps;
+  // const { previousStyleCssText, previousElement } = previousElementProps;
   
-  if (
-    getShouldExecute && getShouldExecute()(currentElement)
-  ) {
-    return;
-  }
+  // if (
+  //   (getShouldExecute && !getShouldExecute()(currentElement)) // when settings, body, or html element
+  //   // getShouldExecute && getShouldExecute()(currentElement) // note: this should probably match mouseMoveEventListener's approach
+  // ) {
+  //   return;
+  // }
 
-  currentElement.style.cssText = previousStyleCssText;
+  // currentElement.style.cssText = previousStyleCssText;
+  // previousElementProps.previousStyleCssText = undefined;
 }
 
 export {
