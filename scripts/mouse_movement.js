@@ -1,12 +1,9 @@
-let i = 0;
 const previousElementProps = {
   previousElement: undefined,
-  previousElementStyle: undefined,
-  previousElementOriginalStyle: undefined,
-  previousElementColor: undefined,
+  previousStyleCssText: undefined,
 };
 
-let currentElement = undefined;
+let currentElement;
 let getShouldExecute;
 let setGetShouldExecute = (newGetShouldExecute) => {
   getShouldExecute = newGetShouldExecute;
@@ -15,55 +12,39 @@ let setGetShouldExecute = (newGetShouldExecute) => {
 const mouseMoveEventListener = (e) => {
   const {
     previousElement,
-    previousElementOriginalBackground,
-    previousElementColor,
+    previousStyleCssText,
   } = previousElementProps;
   // saves element with target text
   currentElement = document.elementFromPoint(e.clientX, e.clientY);
   if (
-    previousElement === currentElement
-    || (getShouldExecute && !getShouldExecute()(currentElement))
+    previousElement === currentElement // hovering over the same element
+    && (getShouldExecute && getShouldExecute()(currentElement)) // when settings or body element
   ) {
     return;
   }
 
   // styling
-  console.log(i, "mouseMoveEventListener begin", currentElement.style.background, currentElement.style.color);
   const prevOrCurrentElement = (previousElement ?? currentElement);
-  const prevOrCurrentColor = (previousElementColor ?? currentElement.style.color);
-  const prevOrCurrentBackground = (previousElementOriginalBackground ?? currentElement.style.background);
-  (prevOrCurrentElement).style.background = prevOrCurrentBackground;
-  (prevOrCurrentElement).style.color = prevOrCurrentColor;
+  const prevOrCurrentStyleCssText = (previousStyleCssText ?? currentElement.style.cssText);
+  prevOrCurrentElement.style.cssText = prevOrCurrentStyleCssText;
+
   previousElementProps.previousElement = currentElement;
-  previousElementProps.previousElementOriginalBackground = currentElement.style.background;
-  previousElementProps.previousElementColor = currentElement.style.color;
+  previousElementProps.previousStyleCssText = currentElement.style.cssText;
+
   currentElement.style.background = "#000000";
   currentElement.style.color = "#eeeeee";
-  console.log(i, "mouseMoveEventListener end", currentElement.style.background, currentElement.style.color);
-  i++;
-
 }
 
 const mouseLeaveEventListener = (e) => {
-  const {
-    previousElementOriginalBackground,
-    previousElementColor,
-  } = previousElementProps;
+  const { previousStyleCssText } = previousElementProps;
   
   if (
-    getShouldExecute && !getShouldExecute()(currentElement)
+    getShouldExecute && getShouldExecute()(currentElement)
   ) {
     return;
   }
 
-  console.log(i, "mouseLeaveEventListener begin", currentElement.style.background, currentElement.style.color);
-
-  currentElement.style.background = previousElementOriginalBackground;
-  currentElement.style.color = previousElementColor;
-
-  console.log(i, "mouseLeaveEventListener end", currentElement.style.background, currentElement.style.color);
-  i++;
-
+  currentElement.style.cssText = previousStyleCssText;
 }
 
 export {
