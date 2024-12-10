@@ -18,7 +18,7 @@ const mouseMoveEventListener = (e) => {
   currentElement = document.elementFromPoint(e.clientX, e.clientY);
   if (
     previousElement === currentElement // hovering over the same element
-    && (getShouldExecute && getShouldExecute()(currentElement)) // when settings or body element
+    || (getShouldExecute && !getShouldExecute()(currentElement)) // when settings, body, or html element
   ) {
     return;
   }
@@ -35,7 +35,7 @@ const mouseMoveEventListener = (e) => {
   // looking forward: currentElement (before its change) is the future previousElement
   previousElementProps.previousElement = currentElement;
   previousElementProps.previousStyleCssText = currentElement.style.cssText;
-  
+
   // highlight currentElement
   currentElement.style.background = "#000000";
   currentElement.style.color = "#eeeeee";
