@@ -77,15 +77,17 @@ if ('speechSynthesis' in window) {
     appendSettings();
   
     const getShouldExecute = () => {
-      const settingsElements = Array.from(
-        document.getElementById(
-          "96005210-8bc2-48ca-9b13-5818a7a9be20"
-        ).querySelectorAll("*")
+      const settingsParent = document.getElementById(
+        "96005210-8bc2-48ca-9b13-5818a7a9be20"
+      );
+      const settingsParentDescendents = Array.from(
+        settingsParent.querySelectorAll("*")
       );
       const shouldExecute = currentElement => !(
-        document.body === currentElement
-        || settingsElements[0].parentElement === currentElement 
-        || settingsElements.includes(currentElement)
+        document.body === currentElement // hovering over body tag
+        || document.querySelector("html") === currentElement // hovering over html tag
+        || settingsParent === currentElement // hovering over settings top element
+        || settingsParentDescendents.includes(currentElement) // hovering over settings descendent
       );
       return shouldExecute;
     }
