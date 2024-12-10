@@ -19,7 +19,6 @@ if ('speechSynthesis' in window) {
     const {
       mouseMoveEventListener,
       mouseLeaveEventListener,
-      setGetShouldExecute: setGetShouldExecuteMouse
     } = mouseMovement;
 
     // listener that styles hovered element and saves its text
@@ -65,8 +64,6 @@ if ('speechSynthesis' in window) {
       setMapping,
       setSelectedVoiceURI,
       setSetPattern,
-      setGetShouldExecute: setGetShouldExecuteSinging,
-      reset: resetSinging
     } = singingVoice;
 
     setSetSelectedVoiceURI(setSelectedVoiceURI);
@@ -75,23 +72,6 @@ if ('speechSynthesis' in window) {
     setSelectedVoiceURI(selectedVoiceURI);
     setSetPattern(setPattern);
     appendSettings();
-  
-    const getShouldExecute = () => {
-      const settingsElements = Array.from(
-        document.getElementById(
-          "96005210-8bc2-48ca-9b13-5818a7a9be20"
-        ).querySelectorAll("*")
-      );
-      const shouldExecute = currentElement => !(
-        document.body === currentElement
-        || settingsElements[0].parentElement === currentElement 
-        || settingsElements.includes(currentElement)
-      );
-      return shouldExecute;
-    }
-
-    setGetShouldExecuteMouse(getShouldExecute);
-    setGetShouldExecuteSinging(getShouldExecute);
     
     // listener that triggers playing text to speech on click event
     addListener(document.body, "click", voiceClickEventListener, true);
