@@ -1,8 +1,3 @@
-let getShouldExecute;
-let setGetShouldExecute = (newGetShouldExecute) => {
-  getShouldExecute = newGetShouldExecute;
-};
-
 let getBps;
 const setGetBps = (newGetBps) => {
   getBps = newGetBps;
@@ -50,11 +45,6 @@ const voiceClickEventListener = (e) => {
   reset();
 
   const currentElement = document.elementFromPoint(e.clientX, e.clientY);
-
-  if (getShouldExecute && !getShouldExecute()(currentElement)) {
-    return;
-  }
-
   const bps = getBps();
   const cleanContent = (content) => {
     return content;
@@ -171,6 +161,5 @@ export {
   setMapping,
   setSelectedVoiceURI,
   setSetPattern,
-  setGetShouldExecute,
   reset
 }

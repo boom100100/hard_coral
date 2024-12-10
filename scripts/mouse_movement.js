@@ -5,27 +5,12 @@ const previousElementProps = {
 
 let hadRecentLeaveEvent = false;
 let currentElement;
-let getShouldExecute;
-let setGetShouldExecute = (newGetShouldExecute) => {
-  getShouldExecute = newGetShouldExecute;
-};
 
-const mouseMoveEventListener = (e) => {
+const setStyling = () => {
   const {
     previousElement,
     previousStyleCssText,
   } = previousElementProps;
-  // saves element with target text
-  currentElement = document.elementFromPoint(e.clientX, e.clientY);
-  if (
-    (
-      previousElement === currentElement // hovering over the same element
-      && !hadRecentLeaveEvent // edge case: mouse leaving screen might be followed by re-enter ay same element
-    )
-    || (getShouldExecute && !getShouldExecute()(currentElement)) // when settings, body, or html element
-  ) {
-    return;
-  }
 
   // styling
   const prevOrCurrentElement = (previousElement ?? currentElement);
@@ -39,6 +24,22 @@ const mouseMoveEventListener = (e) => {
   // looking forward: currentElement (before its change) is the future previousElement
   previousElementProps.previousElement = currentElement;
   previousElementProps.previousStyleCssText = currentElement.style.cssText;
+
+  return prevOrCurrentStyleCssText;
+};
+
+const mouseMoveEventListener = (e) => {
+  // saves element with target text
+  currentElement = document.elementFromPoint(e.clientX, e.clientY);
+  
+  if (
+    previousElementProps.previousElement === currentElement // hovering over the same element
+    && !hadRecentLeaveEvent // edge case: mouse leaving screen might be followed by re-enter at the same element
+  ) {
+    return;
+  }
+
+  setStyling();
 
   // highlight currentElement
   currentElement.style.background = "#000000";
@@ -47,27 +48,7 @@ const mouseMoveEventListener = (e) => {
 }
 
 const mouseLeaveEventListener = (e) => {
-  const { previousStyleCssText, previousElement } = previousElementProps;
-  
-  if (
-    (getShouldExecute && !getShouldExecute()(currentElement)) // when settings, body, or html element
-  ) {
-    return;
-  }
-
-  // styling
-  const prevOrCurrentElement = (previousElement ?? currentElement);
-  // style.cssText reverts more smoothly than style, for some reason.
-  // style is probably just not writeable.
-  const prevOrCurrentStyleCssText = (previousStyleCssText ?? currentElement.style.cssText);
-
-  // set previous element back how it was
-  prevOrCurrentElement.style.cssText = prevOrCurrentStyleCssText;
-  
-  // looking forward: currentElement (before its change) is the future previousElement
-  previousElementProps.previousElement = currentElement;
-  previousElementProps.previousStyleCssText = currentElement.style.cssText;
-  
+  const prevOrCurrentStyleCssText = setStyling();
   // highlight currentElement
   currentElement.style.cssText = prevOrCurrentStyleCssText;
 
@@ -77,5 +58,4 @@ const mouseLeaveEventListener = (e) => {
 export {
   mouseMoveEventListener,
   mouseLeaveEventListener,
-  setGetShouldExecute,
 }
