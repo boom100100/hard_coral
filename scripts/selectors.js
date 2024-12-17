@@ -160,13 +160,25 @@ const completeSetup = (voiceOptions) => {
   extensionDrawer.appendChild(extensionDrawerHideShowToggleButton);
 };
 
+const iframes = document.querySelectorAll("iframe");
+const iframeBodies = [];
+iframes.forEach(e => iframeBodies.append(e.contentDocument?.body));
+
 const append = () => {
   const body = document.body;
+
+  // disabling support for all iframes
+  if (iframeBodies.includes(body)) {
+    return;
+  }
+
   body.insertBefore(extensionDrawer, body.children[0]);
 };
 
 const remove = () => {
-  document.body.removeChild(extensionDrawer);
+  try {
+    document.body.removeChild(extensionDrawer);
+  } catch (error) {} // fail silently
 };
 
 export {
